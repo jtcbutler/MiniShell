@@ -10,7 +10,6 @@ public class MiniShell{
 	private final HashMap<String, ShellCommand> commandMap;
 
 	public MiniShell(){
-
 		commandMap = new HashMap<>();	
 		commandMap.put("clear", new Clear());
 		commandMap.put("pwd", new Pwd());
@@ -56,7 +55,7 @@ public class MiniShell{
 			executable.setArguments(Arrays.copyOfRange(command, 1, command.length));
 		}
 
-		System.out.println(executable.execute());
+		System.out.print(executable.execute());
 	}
 
 	private void executePipe(String[][] commands){
