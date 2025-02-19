@@ -1,6 +1,0 @@
-GREP
-LS
-CD
-PIPE
-
-- 3 flags for each

@@ -1,0 +1,13 @@
+Grep
+
+Ls
+
+Cd
+System.setProperty("user.dir", "/");
+
+Pipe
+
+Cat
+
+- 3 flags for each
+System.getProperty("user.dir");
