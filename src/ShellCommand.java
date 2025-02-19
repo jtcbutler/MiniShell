@@ -18,4 +18,3 @@ abstract public class ShellCommand{
 		}
 	}
 }
-..
