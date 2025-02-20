@@ -22,11 +22,9 @@ public class Ls extends ShellCommand{
             if(files != null){
                 for(File file : files){
                     if(file.getName().charAt(0) != '.' ){
-                        System.out.print(file.getName() + " ");
                         total_return += file.getName() + " ";
                     }         
             }
-                System.err.println("\n");
         }
 
         } else if (this.arguments[0].equals("-A")) {
@@ -37,13 +35,11 @@ public class Ls extends ShellCommand{
 
             if(files != null){
                 for(File file : files){
-                    System.out.print(file.getName() + " ");
                     total_return += file.getName() + " ";
                 }
             }
-            System.err.println("\n");
         }
-        return total_return;
+        return total_return + "\n";
     }
 
 

@@ -110,10 +110,15 @@ public class MiniShell{
 		// for each command in <commands>
 		// set its piped input as the output of the last command and execute
 		for(String[] command : commands){
-			String[] extendedCommand = Arrays.copyOf(command, command.length+1);
-			extendedCommand[command.length] = output;
-			System.out.println(Arrays.toString(extendedCommand));
-			output = execute(extendedCommand);
+			if(output != null){
+				String[] extendedCommand = Arrays.copyOf(command, command.length+1);
+				extendedCommand[command.length] = output;
+				System.out.println(Arrays.toString(extendedCommand));
+				output = execute(extendedCommand);
+			}
+			else{
+				output = execute(command);
+			}
 		}
 
 		// return the output of the final command
