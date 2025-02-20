@@ -16,6 +16,7 @@ public class MiniShell{
 		this.commandMap.put("clear", new Clear());
 		this.commandMap.put("pwd", new Pwd());
 		this.commandMap.put("ls", new Ls());
+		this.commandMap.put("grep", new Grep());
 	}
 
 	public void run(){

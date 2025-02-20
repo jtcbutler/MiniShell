@@ -9,7 +9,7 @@ public class Ls extends ShellCommand{
 
     @Override
     public String execute () throws ShellCommandException {
-        if (arguments.length <1) {
+        if (this.arguments.length <1) {
             // current directory
             String currentPath = System.getProperty("user.dir");
             // create an object for that directory
@@ -27,7 +27,7 @@ public class Ls extends ShellCommand{
                 System.err.println("\n");
         }
 
-        } else if (arguments[0].equals("-A")) {
+        } else if (this.arguments[0].equals("-A")) {
             // print all files and directories
             String currentPath = System.getProperty("user.dir");
             File directory = new File(currentPath);
