@@ -36,6 +36,8 @@ public class ShellPath{
 		ArrayList<String> absolutePathComponents = new ArrayList<String>(Arrays.asList(absolutePath.split(fileSeparatorPattern)));
 		ArrayList<String> relativePathComponents = new ArrayList<String>(Arrays.asList(relativePath.split(fileSeparatorPattern)));
 
+		if(absolutePathComponents.size() == 0) absolutePathComponents.add("");
+
 		for(String relativePathComponent : relativePathComponents){
 			if(relativePathComponent.equals("") || relativePathComponent.equals(".")){
 				continue;

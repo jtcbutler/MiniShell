@@ -123,6 +123,7 @@ public class MiniShell {
 			if(output != null){
 				String[] extendedCommand = Arrays.copyOf(command, command.length+1);
 				extendedCommand[command.length] = output;
+
 				System.out.println(Arrays.toString(extendedCommand));
 				output = executeSolo(extendedCommand);
 			}

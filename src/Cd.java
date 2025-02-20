@@ -21,25 +21,22 @@ public class Cd extends ShellCommand{
 				path = ShellPath.buildPathCurrent(this.arguments[0]);
 			}
 
-			attemptMove(path);
+			File file = new File(path);
+
+			if(!file.exists()){
+				throw new ShellException("cd: " + this.arguments[0] + ": No such file or directory");
+			}
+			else if(!file.isDirectory()){
+				throw new ShellException("cd: " + this.arguments[0] + ": Not a directory");
+			}
+			else{
+				System.setProperty("user.dir", path);
+			}
 		}
 		else{
 			throw new ShellException("cd: too many arguments");
 		}
 
 		return "";
-	}
-
-	private void attemptMove(String path) throws ShellException{
-		File file = new File(path);
-		if(!file.exists()){
-			throw new ShellException("cd: " + this.arguments[0] + ": No such file or directory");
-		}
-		else if(!file.isDirectory()){
-			throw new ShellException("cd: " + this.arguments[0] + ": Not a directory");
-		}
-		else{
-			System.setProperty("user.dir", path);
-		}
 	}
 }
