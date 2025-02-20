@@ -8,7 +8,7 @@ public class Ls extends ShellCommand{
 // finish ls-l
 
     @Override
-    public String execute () throws ShellCommandException {
+    public String execute () throws ShellException {
         String total_return = "";
         if (this.arguments.length <1) {
             // current directory

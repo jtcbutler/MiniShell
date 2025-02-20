@@ -1,34 +1,42 @@
 import java.io.File;
 
 public class Cd extends ShellCommand{
-	public String execute() throws ShellCommandException{
-		if(this.arguments.length > 1){
-			throw new ShellCommandException("cd: too many arguments");
-		}
+
+	@Override
+	public String execute() throws ShellException{
 
 		if(this.arguments.length == 0){
 			System.setProperty("user.dir", System.getProperty("user.home"));
 		}
-		else if(this.arguments[0].startsWith("~")){
-			String relative = this.arguments[0].substring(1, this.arguments[0].length());
-			String path = MiniShell.buildPath(System.getProperty("user.home"), relative);
+		else if(this.arguments.length == 1){
+			String path;
+
+			if(this.arguments[0].startsWith("~")){
+				path = ShellPath.buildPathRoot(this.arguments[0].replace("~", System.getProperty("user.home")));
+			}
+			else if(this.arguments[0].startsWith(ShellPath.root)){
+				path = ShellPath.buildPathRoot(this.arguments[0]);
+			}
+			else{
+				path = ShellPath.buildPathCurrent(this.arguments[0]);
+			}
+
 			attemptMove(path);
 		}
-		else if(this.arguments[0].startsWith(MiniShell.root)){
-		}
 		else{
+			throw new ShellException("cd: too many arguments");
 		}
 
 		return "";
 	}
 
-	private void attemptMove(String path) throws ShellCommandException{
+	private void attemptMove(String path) throws ShellException{
 		File file = new File(path);
 		if(!file.exists()){
-			throw new ShellCommandException("cd: " + this.arguments[0] + ": No such file or directory");
+			throw new ShellException("cd: " + this.arguments[0] + ": No such file or directory");
 		}
 		else if(!file.isDirectory()){
-			throw new ShellCommandException("cd: " + this.arguments[0] + ": Not a directory");
+			throw new ShellException("cd: " + this.arguments[0] + ": Not a directory");
 		}
 		else{
 			System.setProperty("user.dir", path);
