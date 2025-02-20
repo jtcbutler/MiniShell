@@ -121,22 +121,11 @@ public class MiniShell {
 			// if this command is not the first
 			// append the output of the last command to its arguments
 			if(output != null){
-<<<<<<< HEAD
 				String[] extendedCommand = Arrays.copyOf(command, command.length+1);
 				extendedCommand[command.length] = output;
-				// System.out.println(Arrays.toString(extendedCommand));
-				output = execute(extendedCommand);
-			}
-			else{
-				output = execute(command);
-=======
-				String[] tempCommand = Arrays.copyOf(command, command.length+1);
-				tempCommand[command.length] = output;
-				command = tempCommand;
->>>>>>> refs/remotes/origin/main
+				command = extendedCommand;
 			}
 
-			// execute the command, capturing its output
 			output = executeSolo(command);
 		}
 
