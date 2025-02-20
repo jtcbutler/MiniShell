@@ -10,6 +10,9 @@ public class Cd extends ShellCommand{
 			System.setProperty("user.dir", System.getProperty("user.home"));
 		}
 		else if(this.arguments[0].startsWith("~")){
+			String relative = this.arguments[0].substring(1, this.arguments[0].length());
+			String path = MiniShell.buildPath(System.getProperty("user.home"), relative);
+			attemptMove(path);
 		}
 		else if(this.arguments[0].startsWith(MiniShell.root)){
 		}

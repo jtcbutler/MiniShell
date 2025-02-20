@@ -37,7 +37,6 @@ public class MiniShell{
 		this.commandMap.put("cd", new Cd());
 		this.commandMap.put("ls", new Ls());
 		this.commandMap.put("grep", new Grep());
-
 	}
 
 	public void run(){
@@ -67,7 +66,7 @@ public class MiniShell{
 				// if the input is not piped (contained no '|' character)
 				// execute and print the result
 				else{
-					String result = execute(inputSegments, null);
+					String result = execute(inputSegments);
 					System.out.print(result);
 				}
 			}
@@ -87,7 +86,7 @@ public class MiniShell{
 	}
 
 	// execute a single ShellCommand
-	private String execute(String[] command, String pipedInput) throws ShellCommand.ShellCommandException {
+	private String execute(String[] command) throws ShellCommand.ShellCommandException {
 
 		// look up the executable name
 		// if executable is available, set values
@@ -98,7 +97,6 @@ public class MiniShell{
 		}
 		else{
 			executable.setArguments(Arrays.copyOfRange(command, 1, command.length));
-			executable.setPipedInput(pipedInput);
 		}
 
 		// run executable and return its output
@@ -112,7 +110,10 @@ public class MiniShell{
 		// for each command in <commands>
 		// set its piped input as the output of the last command and execute
 		for(String[] command : commands){
-			output = execute(command, output);
+			String[] extendedCommand = Arrays.copyOf(command, command.length+1);
+			extendedCommand[command.length] = output;
+			System.out.println(Arrays.toString(extendedCommand));
+			output = execute(extendedCommand);
 		}
 
 		// return the output of the final command
@@ -158,9 +159,12 @@ public class MiniShell{
 		}
 	}
 
-	public static String buildPath(String absolutePath, String relativePath){
+	public static String buildPath(String absolutePath, String relativePath) throws ShellCommand.ShellCommandException{
 		ArrayList<String> pathComponents = splitPathOnSeparator(absolutePath);
 		ArrayList<String> relativePathComponents = splitPathOnSeparator(relativePath);
+
+		System.out.println(pathComponents);
+		System.out.println(relativePathComponents);
 
 		for(String relativePathComponent : relativePathComponents){
 			if(relativePathComponent.equals("..")){
@@ -170,7 +174,7 @@ public class MiniShell{
 
 				// you have tried to go back too many times
 				else{
-					return null;
+					throw new ShellCommand.ShellCommandException("you may not ascend from root");
 				}
 			}
 			else if(!relativePathComponent.equals(".")){
