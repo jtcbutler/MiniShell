@@ -1,6 +1,12 @@
 Grep
+grep -i  "hello" x.txt  :ignore upper/lower case
+grep -v "hello" x.txt  :exclude lines containing "hello"
+grep -n "hello" x.txt  :show line number of lines containing "hello"
 
 Ls
+ls -A :show hidden files
+ls -l :show detailed information
+ls -lh :show human-readable file sizes
 
 Cd
 System.setProperty("user.dir", "/");
