@@ -5,27 +5,29 @@ public class Grep extends ShellCommand{
     @Override
     public String execute() throws ShellCommand.ShellCommandException{
         // TODO: implement grep command
-        if(this.arguments.length < 3 || this.arguments.length ==2) {
+        if(this.arguments.length <= 1 ) {
             throw new ShellCommand.ShellCommandException("Invalid number of arguments for grep command");
         } else if(this.arguments[0].equals("-i")){
             // TODO: implement case-insensitive grep command
-            execute_i();
+           return execute_i();
         } else if(this.arguments[0].equals("-v")){
-            execute_v();
+           return execute_v();
         } else if(this.arguments[0].equals("-n")){
-            execute_n();
+           return execute_n();
         } else{
-            execute_default();
+           return execute_default();
         }
-
-        
-        return "";
     }
     
     public String execute_default() throws ShellCommand.ShellCommandException{
-        
-        
-        return "";
+        String total_return = "";
+        String[] element_list = this.arguments[1].split("\\s+");
+        for (String element : element_list){
+            if (element.contains(this.arguments[0])){
+                total_return += element + "\n";
+            }
+        }
+        return total_return;
     }
 
     public String execute_i() throws ShellCommand.ShellCommandException{
