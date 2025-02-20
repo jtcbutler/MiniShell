@@ -155,8 +155,8 @@ public class MiniShell{
 		}
 	}
 
-	public static String buildPath(String relativePath){
-		ArrayList<String> pathComponents = splitPathOnSeparator(System.getProperty("user.dir"));
+	public static String buildPath(String absolutePath, String relativePath){
+		ArrayList<String> pathComponents = splitPathOnSeparator(absolutePath);
 		ArrayList<String> relativePathComponents = splitPathOnSeparator(relativePath);
 
 		for(String relativePathComponent : relativePathComponents){
