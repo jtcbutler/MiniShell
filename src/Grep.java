@@ -5,7 +5,7 @@ public class Grep extends ShellCommand{
     @Override
     public String execute() throws ShellCommand.ShellCommandException{
         // TODO: implement grep command
-        if(this.arguments.length < 3){
+        if(this.arguments.length < 3 || this.arguments.length ==2) {
             throw new ShellCommand.ShellCommandException("Invalid number of arguments for grep command");
         } else if(this.arguments[0].equals("-i")){
             // TODO: implement case-insensitive grep command
@@ -14,12 +14,18 @@ public class Grep extends ShellCommand{
             execute_v();
         } else if(this.arguments[0].equals("-n")){
             execute_n();
+        } else{
+            execute_default();
         }
 
         
         return "";
     }
     
+    public String execute_default() throws ShellCommand.ShellCommandException{
+        
+        return "";
+    }
 
     public String execute_i() throws ShellCommand.ShellCommandException{
         //create a file object for the file to be searched

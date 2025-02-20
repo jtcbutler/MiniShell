@@ -9,6 +9,7 @@ public class Ls extends ShellCommand{
 
     @Override
     public String execute () throws ShellCommandException {
+        String total_return = "";
         if (this.arguments.length <1) {
             // current directory
             String currentPath = System.getProperty("user.dir");
@@ -22,6 +23,7 @@ public class Ls extends ShellCommand{
                 for(File file : files){
                     if(file.getName().charAt(0) != '.' ){
                         System.out.print(file.getName() + " ");
+                        total_return += file.getName() + " ";
                     }         
             }
                 System.err.println("\n");
@@ -36,11 +38,12 @@ public class Ls extends ShellCommand{
             if(files != null){
                 for(File file : files){
                     System.out.print(file.getName() + " ");
+                    total_return += file.getName() + " ";
                 }
             }
             System.err.println("\n");
         }
-        return "";
+        return total_return;
     }
 
 

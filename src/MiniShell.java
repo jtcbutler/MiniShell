@@ -34,12 +34,10 @@ public class MiniShell{
 	public MiniShell(){
 		this.commandMap.put("clear", new Clear());
 		this.commandMap.put("pwd", new Pwd());
-<<<<<<< HEAD
 		this.commandMap.put("cd", new Cd());
-=======
 		this.commandMap.put("ls", new Ls());
 		this.commandMap.put("grep", new Grep());
->>>>>>> Ls_Grep
+
 	}
 
 	public void run(){
