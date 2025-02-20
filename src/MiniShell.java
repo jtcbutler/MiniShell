@@ -9,12 +9,32 @@ import java.util.Arrays;
 public class MiniShell{
 	private static final String NAME = "minishell";
 	private static final String PROMPT = NAME + "> ";
+	public static final char separator;
+	public static final String root;
 
 	private final HashMap<String, ShellCommand> commandMap = new HashMap<>();
+
+	static{
+		separator = System.getProperty("file.separator").charAt(0);
+
+		switch(separator){
+
+			// Unix
+			case '/': 
+			root = "/"; 
+			break;
+
+			// Windows
+			default:
+			root = "C:\\";
+			break;
+		}
+	}
 
 	public MiniShell(){
 		this.commandMap.put("clear", new Clear());
 		this.commandMap.put("pwd", new Pwd());
+		this.commandMap.put("cd", new Cd());
 	}
 
 	public void run(){
@@ -54,7 +74,7 @@ public class MiniShell{
 			// print error message
 			catch(ShellCommand.ShellCommandException e){
 				System.out.print(Ansi.ansi().cursorUp(1).fgRed().render(PROMPT).fgDefault().cursorDown(1).cursorLeft(PROMPT.length()));
-				System.out.println(e.getMessage());
+				System.out.println(NAME + ": " + e.getMessage());
 			}
 		}
 
@@ -71,7 +91,7 @@ public class MiniShell{
 		// if the executable is not available, throw exception
 		ShellCommand executable = this.commandMap.get(command[0]);
 		if(executable == null){
-			throw new ShellCommand.ShellCommandException(NAME + ": " + command[0] + ": command not found");
+			throw new ShellCommand.ShellCommandException(command[0] + ": command not found");
 		}
 		else{
 			executable.setArguments(Arrays.copyOfRange(command, 1, command.length));
@@ -128,11 +148,63 @@ public class MiniShell{
 		// ensure that a pipe segment is not empty
 		// this happens when two pipes are next two eachother, and is invalid syntax
 		if(pipeSegment.length == 0){
-			throw new ShellCommand.ShellCommandException(NAME + ": syntax error near unexpected token '|'");
+			throw new ShellCommand.ShellCommandException("syntax error near unexpected token '|'");
 		}
 		else{
 			pipeSegments.add(pipeSegment);
 		}
+	}
+
+	public static String buildPath(String relativePath){
+		ArrayList<String> pathComponents = splitPathOnSeparator(System.getProperty("user.dir"));
+		ArrayList<String> relativePathComponents = splitPathOnSeparator(relativePath);
+
+		for(String relativePathComponent : relativePathComponents){
+			if(relativePathComponent.equals("..")){
+				if(pathComponents.size() > 1){
+					pathComponents.remove(pathComponents.size() - 1);
+				}
+
+				// you have tried to go back too many times
+				else{
+					return null;
+				}
+			}
+			else if(!relativePathComponent.equals(".")){
+				pathComponents.add(relativePathComponent);
+			}
+		}
+
+		return joinPathComponents(pathComponents);
+	}
+
+	private static ArrayList<String> splitPathOnSeparator(String path){
+		ArrayList<String> pathComponents = new ArrayList<>();
+		int componentStart = 0;
+		for(int i = 0; i < path.length(); i++){
+			if(path.charAt(i) == separator){
+				String component = path.substring(componentStart, i);
+				if(!component.equals("")) pathComponents.add(component);
+				componentStart = i+1;
+			}
+		}
+		pathComponents.add(path.substring(componentStart, path.length()));
+		return pathComponents;
+	}
+
+	private static String joinPathComponents(ArrayList<String> pathComponents){
+		String base;
+		if(pathComponents.get(0).equals(root)){
+			base = "";
+		}
+		else{
+			base = root;
+		}
+
+		for(String pathComponent : pathComponents){
+			base += pathComponent + separator;
+		}
+		return base.substring(0, base.length() - 1);
 	}
 
     public static void main(String[] args) {
