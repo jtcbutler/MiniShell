@@ -1,15 +1,9 @@
-abstract public class ShellCommand{
+abstract public class ShellCommand {
 	protected String[] arguments;
 
-	abstract public String execute() throws ShellCommandException;
+	abstract public String execute() throws ShellException;
 	
-	public void setArguments(String[] arguments){
+	public void setArguments(String[] arguments) {
 		this.arguments = arguments;
-	}
-
-	public static class ShellCommandException extends Exception{
-		public ShellCommandException(String message){
-			super(message);
-		}
 	}
 }
