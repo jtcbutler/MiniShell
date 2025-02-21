@@ -6,88 +6,145 @@ public class Grep extends ShellCommand{
     @Override
     public String execute() throws ShellException{
         // TODO: implement grep command
-        if(this.arguments.length <= 1 ) {
+        if(this.arguments.length < 1 ) {
             throw new ShellException("Invalid number of arguments for grep command");
-        } else if(this.arguments[0].equals("-i")){
-            // TODO: implement case-insensitive grep command
-           return execute_i();
+        } else if(this.arguments.length ==1){
+            return execute_stdin();
+        }else if(this.arguments[0].equals("-i")){
+            return execute_i();
         } else if(this.arguments[0].equals("-v")){
-           return execute_v();
+            return execute_v();
         } else if(this.arguments[0].equals("-n")){
-           return execute_n();
-        } else{
-           return execute_default();
+            return execute_n();
+        } else if (this.arguments.length == 2 & isFile(this.arguments[1])) {
+            return execute_without_flag();
+
+        }else{
+            return execute_pipeline();
         }
     }
-    
 
-    public String execute_default() throws ShellException{
+    public boolean isFile(String path){
+        File file = new File(path);
+        return file.isFile();
+    }
+    
+    public String execute_without_flag() throws ShellException{
         String total_return = "";
-        String[] element_list = this.arguments[1].split("\\s+");
-        for (String element : element_list){
-            if (element.contains(this.arguments[0])){
-                total_return += element + "\n";
-            }
-        }
-        return total_return;
-
-    }
-
-    public String execute_i() throws ShellException{
-        //create a file object for the file to be searched
-        File file = new File(this.arguments[2]);
-        // 
-        try{
-	        Scanner sc = new Scanner(file);
-            while(sc.hasNext()){
-                String tmp = sc.nextLine();
-                if (tmp.toLowerCase().contains(this.arguments[1].toLowerCase())){
-                    System.out.println(tmp);
-                }
-		    }   
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        return "";
-    }
-    
-    public String execute_v() throws ShellException{
-        // TODO: implement inverse grep command
-        File file = new File(this.arguments[2]);
-        // 
-        try{
-	        Scanner sc = new Scanner(file);
-            while(sc.hasNext()){
-                String tmp = sc.nextLine();
-                if (!tmp.contains(this.arguments[1])){
-                    System.out.println(tmp);
-                }
-		    }   
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        return "";
-
-    }
-    
-    public String execute_n() throws ShellException{
-        int line_counter=0;
-        //create a file object for the file to be searched
-        File file = new File(this.arguments[2]);
+        File file = new File(this.arguments[1]);
         // 
         try{
             Scanner sc = new Scanner(file);
             while(sc.hasNext()){
-                line_counter++;
                 String tmp = sc.nextLine();
-                if (tmp.contains(this.arguments[1])){
-                    System.out.println(line_counter + ": " + tmp);
+                if (tmp.contains(this.arguments[0])){
+                    total_return += tmp + "\n";
                 }
             }   
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            throw new ShellException(e.getMessage());
         }
-    return "";
+        return total_return;
+    }
+
+    public String execute_stdin() throws ShellException{
+        Scanner scanner = new Scanner(System.in);
+        while (true) { 
+            String str = scanner.nextLine();
+            if (str.equals("exit") || str.equals("quit")) {
+                break;
+            }
+            if (str.contains(this.arguments[0])){
+                System.out.println(str);
+            }
+        }
+        return "";
+    }
+
+
+    public String execute_pipeline() throws ShellException{
+        String total_return = "";
+        if(this.arguments.length < 2){
+            throw new ShellException("Invalid number of arguments for grep command");
+        }else{
+            String[] element_list = this.arguments[1].split("\\s+");
+            for (String element : element_list){
+                if (element.contains(this.arguments[0])){
+                    total_return += element + "\n";
+                }
+            }
+            return total_return;
+        }
+    }
+
+    public String execute_i() throws ShellException{
+        //create a file object for the file to be searched
+        String total_return = "";
+        if(arguments.length < 3){
+            throw new ShellException("Invalid number of arguments for grep command");
+        }
+        else{
+            File file = new File(this.arguments[2]);
+            // 
+            try{
+                Scanner sc = new Scanner(file);
+                while(sc.hasNext()){
+                    String tmp = sc.nextLine();
+                    if (tmp.toLowerCase().contains(this.arguments[1].toLowerCase())){
+                        total_return += tmp + "\n";
+                    }
+                }   
+            } catch (Exception e){
+                throw new ShellException(e.getMessage());
+            }
+            return total_return;
+        }
+    }
+    
+    public String execute_v() throws ShellException{
+        String total_return = "";
+        if(this.arguments.length < 3){
+            throw new ShellException("Invalid number of arguments for grep command");
+        }else{
+            File file = new File(this.arguments[2]);
+            // 
+            try{
+                Scanner sc = new Scanner(file);
+                while(sc.hasNext()){
+                    String tmp = sc.nextLine();
+                    if (!tmp.contains(this.arguments[1])){
+                        total_return += tmp + "\n";
+                    }
+                }   
+            } catch (Exception e){
+                throw new ShellException(e.getMessage());
+            }
+            return total_return;
+        }
+    }
+    
+    public String execute_n() throws ShellException{
+        String total_return = "";
+        if(this.arguments.length < 3){
+            throw new ShellException("Invalid number of arguments for grep command");
+        }else{
+            int line_counter=0;
+            File file = new File(this.arguments[2]);
+            // 
+            try{
+                Scanner sc = new Scanner(file);
+                while(sc.hasNext()){
+                    line_counter++;
+                    String tmp = sc.nextLine();
+                    if (tmp.contains(this.arguments[1])){
+                        total_return += line_counter + ": " + tmp + "\n";
+                    }
+                }   
+            } catch (Exception e){
+                throw new ShellException(e.getMessage());
+            }
+            return total_return; 
+        }
     }
 
 
