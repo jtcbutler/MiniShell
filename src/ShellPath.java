@@ -24,15 +24,20 @@ public class ShellPath{
 
 	private ShellPath(){}
 
-	public static String buildPathRoot(String absolutePath) throws ShellException {
-		return buildPath("", absolutePath);
-	}
+	public static String buildPath(String relativePath) throws ShellException{
+		String absolutePath;
 
-	public static String buildPathCurrent(String relativePath) throws ShellException {
-		return buildPath(System.getProperty("user.dir"), relativePath);
-	}
+		if(relativePath.startsWith(root)){
+			absolutePath = "";
+		}
+		else if(relativePath.startsWith("~")){
+			relativePath = relativePath.replace("~", System.getProperty("user.home"));
+			absolutePath = "";
+		}
+		else{
+			absolutePath = System.getProperty("user.dir");
+		}
 
-	public static String buildPath(String absolutePath, String relativePath) throws ShellException{
 		ArrayList<String> absolutePathComponents = new ArrayList<String>(Arrays.asList(absolutePath.split(fileSeparatorPattern)));
 		ArrayList<String> relativePathComponents = new ArrayList<String>(Arrays.asList(relativePath.split(fileSeparatorPattern)));
 
