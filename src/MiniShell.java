@@ -7,16 +7,16 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 public class MiniShell {
-	public static final String NAME = "minishell";
+	public static final String NAME = "msh";
 	public static final String PROMPT = NAME+"> ";
 
 	private final HashMap<String, ShellCommand> commandMap = new HashMap<>();
-
 
 	public MiniShell(){
 		this.commandMap.put("clear", new Clear());
 		this.commandMap.put("grep", new Grep());
 		this.commandMap.put("pwd", new Pwd());
+		this.commandMap.put("cat", new Cat());
 		this.commandMap.put("cd", new Cd());
 		this.commandMap.put("ls", new Ls());
 	}
