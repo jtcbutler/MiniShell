@@ -59,7 +59,7 @@ public class MiniShell {
 				// if the input is not piped (does not contain any '|' characters)
 				// execute the command and print its result
 				else{
-					String result = executeSolo(inputSegments);
+					String result = executeSolo(inputSegments, false);
 					System.out.print(result);
 				}
 			}
@@ -85,7 +85,7 @@ public class MiniShell {
 	 * @return the String output of the command that was run 
 	 * @throws ShellException if the command was not found or failed
 	*/
-	private String executeSolo(String[] command) throws ShellException {
+	private String executeSolo(String[] command, boolean isPiped) throws ShellException {
 
 		// look up the commands name in the ShellCommand hash table
 		ShellCommand executable = this.commandMap.get(command[0]);
@@ -98,6 +98,7 @@ public class MiniShell {
 		// if the command is available, set its arguments (truncate the commands name) 
 		else{
 			executable.setArguments(Arrays.copyOfRange(command, 1, command.length));
+			executable.setPiped(isPiped);
 		}
 
 		// run command and return its output
@@ -117,27 +118,14 @@ public class MiniShell {
 
 		// run each command in the pipe
 		for(String[] command : commands){
-
-			// if this command is not the first
-			// append the output of the last command to its arguments
 			if(output != null){
-				String[] extendedCommand = Arrays.copyOf(command, command.length+1);
-				extendedCommand[command.length] = output;
-
-				// System.out.println(Arrays.toString(extendedCommand));
-				output = executeSolo(extendedCommand);
+				command = Arrays.copyOf(command, command.length+1);
+				command[command.length-1] = output;
+				output = executeSolo(command, true);
 			}
 			else{
-				output = executeSolo(command);
-
-				// String[] tempCommand = Arrays.copyOf(command, command.length+1);
-				// tempCommand[command.length] = output;
-				// command = tempCommand;
-
+				output = executeSolo(command, false);
 			}
-
-			// execute the command, capturing its output
-			//output = executeSolo(command);
 		}
 
 		// return the output of the final command
@@ -163,7 +151,6 @@ public class MiniShell {
 
 		return pipeSegments.toArray(new String[0][0]);
 	}
-
 
     public static void main(String[] args) {
 		new MiniShell().run();

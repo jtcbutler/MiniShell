@@ -24,18 +24,21 @@ public class ShellPath{
 
 	private ShellPath(){}
 
-	public static String buildPath(String relativePath) throws ShellException{
+	public static String buildPath(String path) throws ShellException{
 		String absolutePath;
+		String relativePath;
 
-		if(relativePath.startsWith(root)){
+		if(path.startsWith(root)){
 			absolutePath = "";
+			relativePath = path;
 		}
-		else if(relativePath.startsWith("~")){
-			relativePath = relativePath.replace("~", System.getProperty("user.home"));
+		else if(path.startsWith("~")){
 			absolutePath = "";
+			relativePath = path.replace("~", System.getProperty("user.home"));
 		}
 		else{
 			absolutePath = System.getProperty("user.dir");
+			relativePath = path;
 		}
 
 		ArrayList<String> absolutePathComponents = new ArrayList<String>(Arrays.asList(absolutePath.split(fileSeparatorPattern)));
@@ -52,7 +55,7 @@ public class ShellPath{
 					absolutePathComponents.remove(absolutePathComponents.size() - 1);
 				}
 				else{
-					throw new ShellException("you may not ascend from root");
+					throw new ShellException("invalid path \"" + path + "\" you may not ascend from root");
 				}
 			}
 			else{
