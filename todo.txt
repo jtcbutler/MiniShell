@@ -4,6 +4,7 @@ grep -v "hello" x.txt  :exclude lines containing "hello"
 grep -n "hello" x.txt  :show line number of lines containing "hello"
 
 Ls
+(also works for ls ../)
 ls -A :show hidden files
 ls -l :show detailed information
 ls -lh :show human-readable file sizes
