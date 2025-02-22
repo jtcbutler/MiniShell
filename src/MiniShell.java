@@ -68,7 +68,7 @@ public class MiniShell {
 			// color the prompt of the command that caused the error red
 			// print the errors message and then continue with the loop
 			catch(ShellException e){
-				System.out.print(Ansi.ansi().cursorUp(1).fgRed().render(PROMPT).fgDefault().cursorDown(1).cursorLeft(PROMPT.length()));
+				System.out.print(Ansi.ansi().cursorUp(1).fgRed().bold().render(PROMPT).fgDefault().boldOff().cursorDown(1).cursorLeft(PROMPT.length()));
 				System.out.println(NAME + ": " + e.getMessage());
 			}
 		}
