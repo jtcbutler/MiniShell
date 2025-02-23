@@ -133,9 +133,10 @@ public class Grep extends ShellCommand{
                 String[] element_list = this.arguments[2].split("\\s+");
                 for (String element : element_list){
                     if (!element.contains(this.arguments[1])){
-                        total_return += element ;
+                        total_return += element +" ";
                     }
                 }
+                total_return += "\n";
             }
             
         }
