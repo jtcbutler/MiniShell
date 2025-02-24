@@ -1,0 +1,23 @@
+Grep
+grep -i  "hello" x.txt  :ignore upper/lower case
+grep -v "hello" x.txt  :exclude lines containing "hello"
+grep -n "hello" x.txt  :show line number of lines containing "hello"
+
+
+
+
+Ls
+(also works for ls ../)
+ls -A :show hidden files
+ls -l :show detailed information
+ls -t :show the files in descending order of last modification time
+
+Cd
+System.setProperty("user.dir", "/");
+
+Pipe
+
+Cat
+
+- 3 flags for each
+System.getProperty("user.dir");
