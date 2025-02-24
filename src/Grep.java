@@ -1,5 +1,7 @@
 import java.io.File;
 import java.util.Scanner;
+import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.Ansi;
 //import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 public class Grep extends ShellCommand{
@@ -9,7 +11,9 @@ public class Grep extends ShellCommand{
         // TODO: implement grep command
         if(this.arguments.length < 1 ) {
             throw new ShellException("Invalid number of arguments for grep command");
-        } else if(this.arguments.length ==1){
+        }else if (this.arguments[0].equals("--help") || this.arguments[0].equals("-h")){
+			return help();
+		}else if(this.arguments.length == 1){
             return execute_stdin();
         }else if(this.arguments[0].equals("-i")){
             return execute_i();
@@ -179,5 +183,16 @@ public class Grep extends ShellCommand{
             return total_return;
     }
 
-
+	protected String help(){
+		return Ansi.ansi().fgYellow().render(""
+		+ "Usage: grep [OPTION]... WORD [FILE]...\n"
+		+ "Search for WORD in each FILE.\n"
+		+ "Example: grep -i 'hello' menu.h main.c\n"
+		+ "\n"
+		+ "Word selection and interpretation:\n"
+		+ MiniShell.INDENT + "-i, --ignore-case         ignore case distinctions in patterns and data\n"
+		+ MiniShell.INDENT + "-v, --invert-match        select non-matching lines\n"
+		+ MiniShell.INDENT + "-n, --line-number         print line number with output lines\n"
+		).fgDefault().toString();
+	}
 }
