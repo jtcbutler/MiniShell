@@ -40,7 +40,7 @@ public class Ls extends ShellCommand{
             return execute_Ls_A();
         } else if (this.arguments[0].equals("-l")) {
             return execute_Ls_l();
-        } else if (this.arguments[0].equals("-t")) {
+        } else if (this.arguments[0].equals("-lh")) {
             return execute_Ls_lh();
         } else{
             if(this.arguments.length>1){
@@ -99,6 +99,7 @@ public class Ls extends ShellCommand{
             
         File directory = new File(fullPath);
         File[] files = directory.listFiles();
+
         if(files != null){
             for(File file : files){
                 if(!file.isHidden()){
@@ -166,15 +167,24 @@ public class Ls extends ShellCommand{
                     } else{
                         total_return+="-";
                     }
+                    total_return+=" ";
+
+
+
 
                     // number of links
-                    // Path link =readSymbolicLink(file_path);
-                    //total_return+=link.toString().length()+" ";
-
-                    //total_return+=attributes.toString()+file.getName()+"\n";
+                    int linkCount = (Integer) Files.getAttribute(file_path, "unix:nlink");
+                    total_return+=linkCount+" ";     
                     total_return+=" ";
+
+
                     //owner
                     total_return+=Files.getOwner(file_path);
+                    total_return+=" ";
+
+                    //group
+                    String group = Files.getAttribute(file_path, "posix:group").toString();
+                    total_return+=group;
                     total_return+=" ";
 
                     //size
@@ -198,13 +208,11 @@ public class Ls extends ShellCommand{
                 }
         }
 
-
         return total_return +"\n";
-}
+    }
 
 
 
-    
     public String execute_Ls_lh() throws ShellException{
         String total_return = "";
         String fullPath = "";
@@ -285,12 +293,20 @@ public class Ls extends ShellCommand{
                         total_return+="-";
                     }
 
-                    // number of links
                     total_return+=" ";
 
+                    // number of links
+                    int linkCount = (Integer) Files.getAttribute(file_path, "unix:nlink");
+                    total_return+=linkCount+" ";
+                    total_return+=" ";
 
                     //owner
                     total_return+=Files.getOwner(file_path);
+                    total_return+=" ";
+
+                    //group
+                    String group = Files.getAttribute(file_path, "posix:group").toString();
+                    total_return+=group;
                     total_return+=" ";
 
                     //size
@@ -299,9 +315,9 @@ public class Ls extends ShellCommand{
                     total_return+=" ";
 
                     // last modified time
+                    // https://web.cs.ucla.edu/classes/winter15/cs144/projects/java/simpledateformat.html
                     SimpleDateFormat sdf = new SimpleDateFormat("MMM d HH:mm");
                     total_return +=sdf.format(Files.getLastModifiedTime(file_path).toMillis());
-                    //.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toString()
                     total_return+=" ";
                     //name
                     total_return+=file.getName()+"\n";
@@ -314,7 +330,6 @@ public class Ls extends ShellCommand{
         }
 
         return total_return +"\n";
-    
     }
 
 	protected String help(){
