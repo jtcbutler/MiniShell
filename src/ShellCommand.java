@@ -12,4 +12,9 @@ abstract public class ShellCommand {
 	public void setPiped(boolean isPiped){
 		this.isPiped = isPiped;
 	}
+
+	protected boolean isHelp(){
+		if(arguments.length == 0) return false;
+		else return arguments[0].equals("--help") || arguments[0].equals("-h");
+	}
 }

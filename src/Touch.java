@@ -17,7 +17,7 @@ public class Touch extends ShellCommand {
 		else{
 			for(String filename : arguments){
 				try {
-					File file = new File(filename);
+					File file = new File(ShellPath.buildPath(filename));
 					if(!file.exists()){
 						file.createNewFile();
 					}

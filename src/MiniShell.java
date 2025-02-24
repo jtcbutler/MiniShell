@@ -14,6 +14,7 @@ public class MiniShell {
 
 	public MiniShell(){
 		this.commandMap.put("clear", new Clear());
+		this.commandMap.put("mkdir", new Mkdir());
 		this.commandMap.put("touch", new Touch());
 		this.commandMap.put("grep", new Grep());
 		this.commandMap.put("pwd", new Pwd());
