@@ -1,6 +1,5 @@
 import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.Ansi;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -15,6 +14,7 @@ public class MiniShell {
 
 	public MiniShell(){
 		this.commandMap.put("clear", new Clear());
+		this.commandMap.put("touch", new Touch());
 		this.commandMap.put("grep", new Grep());
 		this.commandMap.put("pwd", new Pwd());
 		this.commandMap.put("cat", new Cat());

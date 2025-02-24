@@ -34,7 +34,9 @@ public class Ls extends ShellCommand{
             }
             return total_return + "\n";
 
-        } else if (this.arguments[0].equals("-A")) {
+        }else if (this.arguments[0].equals("--help") || this.arguments[0].equals("-h")) {
+            return help();
+		}else if (this.arguments[0].equals("-A")) {
             return execute_Ls_A();
         } else if (this.arguments[0].equals("-l")) {
             return execute_Ls_l();
@@ -315,4 +317,8 @@ public class Ls extends ShellCommand{
     
     }
 
+	protected String help(){
+		return Ansi.ansi().fgYellow().render(""
+		).fgDefault().toString();
+	}
 }

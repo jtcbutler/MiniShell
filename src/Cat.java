@@ -235,6 +235,7 @@ public class Cat extends ShellCommand {
 		+ "\n"
 		+ "Examples:\n"
 		+ MiniShell.INDENT + "cat a      Output a's contents\n"
-		+ MiniShell.INDENT + "cat a b    Output a's contents concatentated with b's contents\n").fgDefault().toString();
+		+ MiniShell.INDENT + "cat a b    Output a's contents concatentated with b's contents\n"
+		).fgDefault().toString();
 	}
 }

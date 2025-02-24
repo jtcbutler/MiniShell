@@ -4,6 +4,18 @@ import org.fusesource.jansi.Ansi;
 public class Clear extends ShellCommand {
 	@Override
 	public String execute() throws ShellException{
-		return Ansi.ansi().eraseScreen().cursor(0, 0).toString();
+		if(arguments.length > 0 && (arguments[0].equals("--help") || arguments[0].equals("-h"))){
+			return help();
+		}
+		else{
+			return Ansi.ansi().eraseScreen().cursor(0, 0).toString();
+		}
+	}
+
+	protected String help(){
+		return Ansi.ansi().fgYellow().render(""
+		+ "Usage: clear\n"
+		+ "Clears all text from the terminal\n"
+		).fgDefault().toString();
 	}
 }
