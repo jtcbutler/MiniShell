@@ -180,9 +180,9 @@ public class Ls extends ShellCommand{
                     total_return+=" ";
 
                     // last modified time
-                    SimpleDateFormat sdf = new SimpleDateFormat("MMM d h:mm:ss");
+                    // https://web.cs.ucla.edu/classes/winter15/cs144/projects/java/simpledateformat.html
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM d HH:mm");
                     total_return +=sdf.format(Files.getLastModifiedTime(file_path).toMillis());
-                    //.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toString()
                     total_return+=" ";
                     //name
                     total_return+=file.getName()+"\n";
@@ -284,11 +284,9 @@ public class Ls extends ShellCommand{
                     }
 
                     // number of links
-                    // Path link =readSymbolicLink(file_path);
-                    //total_return+=link.toString().length()+" ";
-
-                    //total_return+=attributes.toString()+file.getName()+"\n";
                     total_return+=" ";
+
+
                     //owner
                     total_return+=Files.getOwner(file_path);
                     total_return+=" ";
@@ -299,7 +297,7 @@ public class Ls extends ShellCommand{
                     total_return+=" ";
 
                     // last modified time
-                    SimpleDateFormat sdf = new SimpleDateFormat("MMM d h:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM d HH:mm");
                     total_return +=sdf.format(Files.getLastModifiedTime(file_path).toMillis());
                     //.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toString()
                     total_return+=" ";
@@ -313,9 +311,7 @@ public class Ls extends ShellCommand{
                 }
         }
 
-
         return total_return +"\n";
-
     
     }
 
