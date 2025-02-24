@@ -10,7 +10,7 @@ Ls
 (also works for ls ../)
 ls -A :show hidden files
 ls -l :show detailed information
-ls -lh :show human-readable file sizes
+ls -t :show the files in descending order of last modification time
 
 Cd
 System.setProperty("user.dir", "/");
