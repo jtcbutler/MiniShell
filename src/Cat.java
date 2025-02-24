@@ -1,31 +1,34 @@
 import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.Ansi;
+
 import java.io.FileNotFoundException;
 import java.lang.StringBuilder;
-import java.util.ListIterator;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.HashMap;
 import java.util.Arrays;
 import java.io.File;
 
 public class Cat extends ShellCommand {
-	private static final String[] VALID_PARAMETERS = {
-		"-p", "--pipe-position"
-	};
+	private static final HashMap<String, String> ABBREVIATION_MAP  = new HashMap<>();
 
-	private static final String[] VALID_FLAGS = {
-		"-h", "--help",
-		"-s", "--squeeze-blank", 
-		"-n", "--number", 
-		"-b", "--number-nonblank",
-		"-E", "--show-ends",
-	};
+	private final HashMap<String, Boolean> flagMap = new HashMap<>();
 
-	private static final String INDENT = "  ";
+	static{
+		ABBREVIATION_MAP.put("-b", "--number-nonblank");
+		ABBREVIATION_MAP.put("-s", "--squeeze-blank");
+		ABBREVIATION_MAP.put("-E", "--show-ends");
+		ABBREVIATION_MAP.put("-n", "--number");
+		ABBREVIATION_MAP.put("-h", "--help");
+	}
 
-	private final int[] parameters = new int[VALID_PARAMETERS.length / 2];
-	private final boolean[] flags = new boolean[VALID_FLAGS.length / 2];
+	public Cat(){
+		flagMap.put("--number-nonblank", false);
+		flagMap.put("--squeeze-blank", false);
+		flagMap.put("--show-ends", false);
+		flagMap.put("--number", false);
+		flagMap.put("--help", false);
+	}
 
 	@Override
 	public String execute() throws ShellException {
@@ -33,108 +36,78 @@ public class Cat extends ShellCommand {
 			throw new ShellException("cat: no arguments found");
 		}
 
-		String[] inputs = setOptions();
+		String[] inputs = setFlags();
 
-		if(flags[0]){
-			return help();
-		}
-		else if(inputs.length == 0){
+		if(inputs.length == 0){
 			throw new ShellException("cat: no inputs found");
 		}
 		else{
-			String[] lines = assembleBase(inputs);
-			if(flags[1]){
-				squeezeBlank(lines);
-			}
-			if(flags[2]){
-				if(flags[3]){
-					numberNonblank(lines);
-				}
-				else{
-					number(lines);
-				}
-			}
-			else if(flags[3]){
-				numberNonblank(lines);
-			}
-			if(flags[4]){
-				showEnds(lines);
-			}
-			return recombine(lines);
+			return generateOutput(inputs);
 		}
 	}
 
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
-		+ "Usage: cat [OPTION]... [FILE]...\n"
-		+ "Concatenate FILE(s) to standard output.\n"
-		+ "\n"
-		+ "-s, --squeeze-blank        suppress repeated empty output lines\n"
-		+ "-n, --number               number all output lines\n"
-		+ "-b, --number-nonblank      number nonempty output lines, overrides -n\n"
-		+ "-E, --show-ends            display $ at end of each line\n"
-		+ "\n"
-		+ "-p, --pipe-position=INDEX  the INDEX (relative to other inputs) at which piped input should be inserted\n"
-		+ "                           by default, piped input will be inserted before all other inputs\n"
-		+ "\n"
-		+ "Examples:\n"
-		+ "  cat a      Output a's contents\n"
-		+ "  cat a b    Output a's contents concatentated with b's contents\n").fgDefault().toString();
-	}
-
-	private String[] setOptions() throws ShellException {
-
-		for(int i = 0; i < parameters.length; i++){
-			parameters[i] = 0;
-		}
-		for(int i = 0; i < flags.length; i++){
-			flags[i] = false;
-		}
+	private String[] setFlags() throws ShellException {
+		flagMap.forEach((k, v)->{flagMap.put(k, false);});
 
 		int index = 0;
-
-		while(index < arguments.length){
-			if (!arguments[index].startsWith("-")) break;
-
-			int parameterIndex = -1;
-			for(int i = 0; i < VALID_PARAMETERS.length; i++){
-				if(arguments[index].equals(VALID_PARAMETERS[i])) parameterIndex = i;
+		while(index < arguments.length && arguments[index].startsWith("-")){
+			if(arguments[index].length() == 1){
+				throw new ShellException("");
 			}
-			if(parameterIndex >= 0){
-				if(index+1 == arguments.length || arguments[index+1].startsWith("-")){
-					throw new ShellException("cat: " + arguments[index] + ": no value provided");
+			else if(arguments[index].charAt(1) == '-'){
+				if(flagMap.containsKey(arguments[index])){
+					flagMap.put(arguments[index], true);
 				}
-
-				try{
-					parameters[parameterIndex / 2] = Integer.parseInt(arguments[index+1]);
-					index += 2;
-					continue;
-				}
-				catch(NumberFormatException e){
-					throw new ShellException("cat: " + arguments[index] + ": invalid value provided");
+				else{
+					throw new ShellException("");
 				}
 			}
-
-			int flagIndex = -1;
-			for(int i = 0; i < VALID_FLAGS.length; i++){
-				if(arguments[index].equals(VALID_FLAGS[i])) flagIndex = i;
+			else{
+				String key = ABBREVIATION_MAP.get(arguments[index]);
+				if(key != null){
+					flagMap.put(key, true);
+				}
+				else{
+					throw new ShellException("");
+				}
 			}
-			if(flagIndex >= 0){
-				flags[flagIndex / 2] = true;
-				index++;
-				continue;
-			}
-
-			throw new ShellException("cat: invalid option '" + arguments[index] + "'\n");
+			index++;
 		}
-
 		return Arrays.copyOfRange(arguments, index, arguments.length);
 	}
 
-	private String[] assembleBase(String[] inputs) throws ShellException {
-		ArrayList<ArrayList<String>> inputLines = new ArrayList<>(isPiped ? inputs.length - 1 : inputs.length);
-		int numberOfLines = 0;
+	private String generateOutput(String[] inputs) throws ShellException {
+		if(flagMap.get("--help")){
+			return help();
+		}
 
+		String[] lines = assembleBase(inputs);
+
+		if(flagMap.get("--squeeze-blank")){
+			squeezeBlank(lines);
+		}
+
+		if(flagMap.get("--number-nonblank")){
+			number(lines, true);
+			flagMap.put("--number", false);
+		}
+
+		if(flagMap.get("--number")){
+			number(lines, false);
+		}
+
+		if(flagMap.get("--show-ends")){
+			showEnds(lines);
+		}
+
+		return recombine(lines);
+	}
+
+
+	private String[] assembleBase(String[] inputs) throws ShellException {
+
+		ArrayList<ArrayList<String>> inputLines = new ArrayList<>();
+		int numberOfLines = 0;
 		for(int i = 0; i < (isPiped ? inputs.length - 1 : inputs.length); i++){
 			ArrayList<String> lines = new ArrayList<>();
 
@@ -166,46 +139,21 @@ public class Cat extends ShellCommand {
 		}
 
 		String[] base;
+		int baseIndex;
 		if(isPiped){
-			if(parameters[0] < 0) parameters[0] = 0;
-			else if(parameters[0] > inputLines.size()) parameters[0] = inputLines.size();
-
-			ArrayList<String> pipedInputLines = new ArrayList<>();
-			for(String line : inputs[inputs.length - 1].split("\n")){
-				pipedInputLines.add(line);
-				numberOfLines++;
-			}
-
-			base = new String[numberOfLines];
-
-			int baseIndex = 0;
-			for(int i = 0; i < parameters[0]; i++){
-				for(String line : inputLines.get(i)){
-					base[baseIndex] = line;
-					baseIndex++;
-				}
-			}
-
-			for(String line : pipedInputLines){
-				base[baseIndex] = line;
-				baseIndex++;
-			}
-
-			for(int i = parameters[0]; i < inputLines.size(); i++){
-				for(String line : inputLines.get(i)){
-					base[baseIndex] = line;
-					baseIndex++;
-				}
-			}
+			base = inputs[inputs.length - 1].split("\n");
+			base = Arrays.copyOf(base, base.length + numberOfLines);
+			baseIndex = base.length - numberOfLines;
 		}
 		else{
 			base = new String[numberOfLines];
-			int baseIndex = 0;
-			for(int i = 0; i < inputLines.size(); i++){
-				for(String line : inputLines.get(i)){
-					base[baseIndex] = line;
-					baseIndex++;
-				}
+			baseIndex = 0;
+		}
+
+		for(int i = 0; i < inputLines.size(); i++){
+			for(String line : inputLines.get(i)){
+				base[baseIndex] = line;
+				baseIndex++;
 			}
 		}
 
@@ -249,7 +197,7 @@ public class Cat extends ShellCommand {
 		}
 	}
 
-	private void number(String[] lines){
+	private void number(String[] lines, boolean nonblank){
 		int lineNumber = 0;
 		for(String line : lines){
 			if(line != null){
@@ -257,47 +205,36 @@ public class Cat extends ShellCommand {
 			}
 		}
 
-		int indent = String.valueOf(lineNumber).length() + INDENT.length();
+		int indent = String.valueOf(lineNumber).length() + MiniShell.INDENT.length();
 		StringBuilder builder = new StringBuilder();
 		lineNumber = 1;
 
 		for(int i = 0; i < lines.length; i++){
-			if(lines[i] != null){
+			if(lines[i] != null && (nonblank ? !lines[i].isEmpty() : true)){
 				builder.setLength(0);
 				String lineNumberText = String.valueOf(lineNumber);
 				for(int j = 0; j < indent - lineNumberText.length(); j++){
 					builder.append(" ");
 				}
 				builder.append(lineNumberText);
-				lines[i] = builder.toString() + INDENT + lines[i];
+				lines[i] = builder.toString() + MiniShell.INDENT + lines[i];
 				lineNumber++;
 			}
 		}
 	}
 
-	private void numberNonblank(String[] lines){
-		int lineNumber = 0;
-		for(String line : lines){
-			if(line != null && !line.isEmpty()){
-				lineNumber++;
-			}
-		}
-
-		int indent = String.valueOf(lineNumber).length() + INDENT.length();
-		StringBuilder builder = new StringBuilder();
-		lineNumber = 1;
-
-		for(int i = 0; i < lines.length; i++){
-			if(lines[i] != null && !lines[i].isEmpty()){
-				builder.setLength(0);
-				String lineNumberText = String.valueOf(lineNumber);
-				for(int j = 0; j < indent - lineNumberText.length(); j++){
-					builder.append(" ");
-				}
-				builder.append(lineNumberText);
-				lines[i] = builder.toString() + INDENT + lines[i];
-				lineNumber++;
-			}
-		}
+	protected String help(){
+		return Ansi.ansi().fgYellow().render(""
+		+ "Usage: cat [OPTION]... [FILE]...\n"
+		+ "Concatenate FILE(s) to standard output.\n"
+		+ "\n"
+		+ "-b, --number-nonblank      number nonempty output lines, overrides -n\n"
+		+ "-s, --squeeze-blank        suppress repeated empty output lines\n"
+		+ "-E, --show-ends            display $ at end of each line\n"
+		+ "-n, --number               number all output lines\n"
+		+ "\n"
+		+ "Examples:\n"
+		+ MiniShell.INDENT + "cat a      Output a's contents\n"
+		+ MiniShell.INDENT + "cat a b    Output a's contents concatentated with b's contents\n").fgDefault().toString();
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public class MiniShell {
 	public static final String NAME = "msh";
+	public static final String INDENT = "  ";
 	public static final String PROMPT = NAME+"> ";
 
 	private final HashMap<String, ShellCommand> commandMap = new HashMap<>();
@@ -33,11 +34,12 @@ public class MiniShell {
 
 		while(true){
 			try{
+				String output;
 
 				// read input from the user
 				// split the input on whitespace
 				// store the result in an array
-				System.out.print(PROMPT);
+				System.out.print(Ansi.ansi().bold().render(PROMPT).boldOff());
 				String[] inputSegments = (scanner.nextLine().split("\\s+"));
 
 				// if the first word of the input was "exit"
@@ -46,22 +48,23 @@ public class MiniShell {
 					break;
 				}
 
+
 				// if the input is piped (contains at least one '|' character)
 				// seperate into individual commands by splitting at '|' character
 				// execute the resulting list of commands, piping their results
-				// print the final commands result
 				else if(Arrays.asList(inputSegments).contains("|")){
 					String[][] pipedInputSegments = splitPipedInput(inputSegments);
-					String result = executePipe(pipedInputSegments);
-					System.out.print(result);
+					output = executePipe(pipedInputSegments);
 				}
 
 				// if the input is not piped (does not contain any '|' characters)
-				// execute the command and print its result
+				// execute the command
 				else{
-					String result = executeSolo(inputSegments, false);
-					System.out.print(result);
+					output = executeSolo(inputSegments, false);
 				}
+
+				System.out.print(Ansi.ansi().cursorUp(1).fgGreen().bold().render(PROMPT).fgDefault().boldOff().cursorDown(1).cursorLeft(PROMPT.length()));
+				System.out.print(output);
 			}
 
 			// if an error occurs at any point, it will be propagated to this catch block
