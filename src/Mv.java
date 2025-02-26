@@ -28,7 +28,7 @@ public class Mv extends ShellCommand{
 		File destination = new File(ShellPath.buildPath(arguments[1]));
 
 		if(destination.isDirectory()){
-			destination = new File(ShellPath.buildPath(arguments[1]) + ShellPath.fileSeparator + ShellPath.getLast(arguments[0]));
+			destination = new File(ShellPath.buildPath(arguments[1]) + ShellPath.FILE_SEPARATOR + ShellPath.getLast(arguments[0]));
 		}
 
 		if(!source.renameTo(destination)){
@@ -45,7 +45,7 @@ public class Mv extends ShellCommand{
 
 		for(int i = 0; i < arguments.length - 1; i++){
 			File source = new File(ShellPath.buildPath(arguments[i]));
-			File destination = new File(destinationPath + ShellPath.fileSeparator + ShellPath.getLast(arguments[i]));
+			File destination = new File(destinationPath + ShellPath.FILE_SEPARATOR + ShellPath.getLast(arguments[i]));
 
 			if(!source.renameTo(destination)){
 				throw new ShellException("");

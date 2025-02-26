@@ -32,7 +32,7 @@ public class Cp extends ShellCommand{
 		String destination = ShellPath.buildPath(arguments[1]);
 
 		if(new File(destination).isDirectory()){
-			destination = ShellPath.buildPath(arguments[1]) + ShellPath.fileSeparator + ShellPath.getLast(arguments[0]);
+			destination = ShellPath.buildPath(arguments[1]) + ShellPath.FILE_SEPARATOR + ShellPath.getLast(arguments[0]);
 		}
 
 		try{
@@ -52,7 +52,7 @@ public class Cp extends ShellCommand{
 
 		for(int i = 0; i < arguments.length - 1; i++){
 			Path source = Paths.get(ShellPath.buildPath(arguments[i]));
-			Path destination = Paths.get(destinationPath + ShellPath.fileSeparator + ShellPath.getLast(arguments[i]));
+			Path destination = Paths.get(destinationPath + ShellPath.FILE_SEPARATOR + ShellPath.getLast(arguments[i]));
 
 			try{
 				Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
