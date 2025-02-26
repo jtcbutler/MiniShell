@@ -1,6 +1,5 @@
 INCOMPLETE:
 
-ShellPath.java
 MiniShell.java
 Clear.java
 Mkdir.java
@@ -18,4 +17,5 @@ COMPLETE:
 
 ShellException.java
 ShellCommand.java
+ShellPath.java
 Rm.java
