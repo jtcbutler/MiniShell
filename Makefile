@@ -2,8 +2,11 @@ SOURCE=src
 BUILD=build
 LIB=external/jansi-2.4.0.jar
 
-compile:
+default:
 	javac -g -cp .:$(LIB):$(SOURCE) $(SOURCE)/MiniShell.java -d $(BUILD)
+
+strict:
+	javac -Xdoclint -Xlint -g -cp .:$(LIB):$(SOURCE) $(SOURCE)/MiniShell.java -d $(BUILD)
 
 debug: compile
 	# to connect, run "jdb -attach localhost:8000" while in the src/ directory
