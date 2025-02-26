@@ -2,7 +2,7 @@
  * A stripped down version of the Bash command 'rm'
  *
  * @author	Jackson Butler
- * @date	Feb 25, 2025
+ * @since 	Feb 25, 2025
  */
 
 import org.fusesource.jansi.Ansi;
