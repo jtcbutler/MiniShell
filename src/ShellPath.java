@@ -1,8 +1,6 @@
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Arrays;
 import java.lang.StringBuilder;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ShellPath{
 	public static final String root;
