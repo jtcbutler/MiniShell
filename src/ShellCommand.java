@@ -69,7 +69,7 @@ abstract public class ShellCommand {
 	/**
 	 * Explain the intended use of this command
 	 *
-	 * @return String an explanation of the command
+	 * @return an explanation of the command
 	*/
 	abstract protected String help();
 
