@@ -1,14 +1,9 @@
-import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.Ansi;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Files.*;
 import java.nio.file.attribute.*;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.util.ArrayList;
-//import java.nio.file.Files;
 import java.util.Set;
 
 public class Ls extends ShellCommand{

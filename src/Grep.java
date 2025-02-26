@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.Scanner;
-import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.Ansi;
 //import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
@@ -38,8 +37,7 @@ public class Grep extends ShellCommand{
         String total_return = "";
         File file = new File(this.arguments[1]);
         // 
-        try{
-            Scanner sc = new Scanner(file);
+        try(Scanner sc = new Scanner(file)){
             while(sc.hasNext()){
                 String tmp = sc.nextLine();
                 if (tmp.contains(this.arguments[0])){
@@ -63,6 +61,7 @@ public class Grep extends ShellCommand{
                 System.out.println(str);
             }
         }
+        scanner.close();
         return "";
     }
 
@@ -90,8 +89,7 @@ public class Grep extends ShellCommand{
         } else if (isFile(this.arguments[2])){
             File file = new File(this.arguments[2]);
             // 
-            try{
-                Scanner sc = new Scanner(file);
+            try(Scanner sc = new Scanner(file)){
                 while(sc.hasNext()){
                     String tmp = sc.nextLine();
                     if (tmp.toLowerCase().contains(this.arguments[1].toLowerCase())){
@@ -121,8 +119,7 @@ public class Grep extends ShellCommand{
             if(isFile(this.arguments[2])){
                 File file = new File(this.arguments[2]);
             // 
-            try{
-                Scanner sc = new Scanner(file);
+            try(Scanner sc = new Scanner(file)){
                 while(sc.hasNext()){
                     String tmp = sc.nextLine();
                     if (!tmp.contains(this.arguments[1])){
@@ -156,8 +153,7 @@ public class Grep extends ShellCommand{
             if(isFile(this.arguments[2])){   
             File file = new File(this.arguments[2]);
             // 
-            try{
-                Scanner sc = new Scanner(file);
+            try(Scanner sc = new Scanner(file)){
                 while(sc.hasNext()){
                     line_counter++;
                     String tmp = sc.nextLine();
