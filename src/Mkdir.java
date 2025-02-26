@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.IOException;
 
 public class Mkdir extends ShellCommand{
 	protected String processCommand() throws ShellException{

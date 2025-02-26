@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.Ansi;
 
 public class Touch extends ShellCommand {

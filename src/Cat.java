@@ -1,4 +1,3 @@
-import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.Ansi;
 
 import java.io.FileNotFoundException;
