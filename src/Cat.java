@@ -110,13 +110,7 @@ public class Cat extends ShellCommand {
 		for(int i = 0; i < (isPiped ? inputs.length - 1 : inputs.length); i++){
 			ArrayList<String> lines = new ArrayList<>();
 
-			File file;
-			if(inputs[i].startsWith(ShellPath.root)){
-				file = new File(inputs[i]);
-			}
-			else{
-				file = new File(ShellPath.buildPath(inputs[i]));
-			}
+			File file = new File(ShellPath.buildPath(inputs[i]));
 
 			if(file.isDirectory()){
 				throw new ShellException("cat: " + inputs[i] + ": is a directory");
