@@ -5,7 +5,7 @@ import java.io.File;
 public class Cd extends ShellCommand{
 
 	@Override
-	public String execute() throws ShellException{
+	protected String processCommand() throws ShellException{
 
 		if(arguments.length == 0){
 			System.setProperty("user.dir", System.getProperty("user.home"));

@@ -2,12 +2,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class Mkdir extends ShellCommand{
-	public String execute() throws ShellException{
+	protected String processCommand() throws ShellException{
 		if(arguments.length == 0){
 			throw new ShellException("mkdir: Missing operand");
 		}
 
-		if(isHelp()){
+		if(helpNeeded()){
 			return help();
 		}
 		else{

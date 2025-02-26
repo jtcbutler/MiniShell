@@ -66,6 +66,11 @@ public class ShellPath{
 		return joinPathComponents(absolutePathComponents);
 	}
 
+	public static String getLast(String path){
+		String[] components = path.split(fileSeparatorPattern);
+		return components[components.length - 1];
+	}
+
 	private static String joinPathComponents(ArrayList<String> pathComponents){
 		StringBuilder path = new StringBuilder();
 

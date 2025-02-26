@@ -7,7 +7,7 @@ import org.fusesource.jansi.Ansi;
 public class Grep extends ShellCommand{
 
     @Override
-    public String execute() throws ShellException{
+    protected String processCommand() throws ShellException{
         // TODO: implement grep command
         if(this.arguments.length < 1 ) {
             throw new ShellException("Invalid number of arguments for grep command");

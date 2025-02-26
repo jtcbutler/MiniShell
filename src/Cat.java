@@ -31,7 +31,7 @@ public class Cat extends ShellCommand {
 	}
 
 	@Override
-	public String execute() throws ShellException {
+	protected String processCommand() throws ShellException {
 		if(arguments.length == 0) {
 			throw new ShellException("cat: no arguments found");
 		}

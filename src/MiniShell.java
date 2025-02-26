@@ -15,12 +15,16 @@ public class MiniShell {
 	public MiniShell(){
 		this.commandMap.put("clear", new Clear());
 		this.commandMap.put("mkdir", new Mkdir());
+		this.commandMap.put("rmdir", new Rmdir());
 		this.commandMap.put("touch", new Touch());
 		this.commandMap.put("grep", new Grep());
 		this.commandMap.put("pwd", new Pwd());
 		this.commandMap.put("cat", new Cat());
 		this.commandMap.put("cd", new Cd());
 		this.commandMap.put("ls", new Ls());
+		this.commandMap.put("rm", new Rm());
+		this.commandMap.put("mv", new Mv());
+		this.commandMap.put("cp", new Cp());
 	}
 
 	/**

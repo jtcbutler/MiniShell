@@ -5,7 +5,7 @@ import org.fusesource.jansi.Ansi;
 
 public class Touch extends ShellCommand {
 	@Override
-	public String execute() throws ShellException {
+	protected String processCommand() throws ShellException {
 
 		if(arguments.length < 1){
 			throw new ShellException("touch: Missing file operand");

@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class Ls extends ShellCommand{
     @Override
-    public String execute () throws ShellException {
+    protected String processCommand() throws ShellException {
         String total_return = "";
         if(this.arguments.length >2){
             throw new ShellException("ls: too many arguments");
