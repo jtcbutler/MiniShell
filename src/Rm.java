@@ -1,13 +1,12 @@
+import org.fusesource.jansi.Ansi;
+import java.io.File;
+
 /**
  * A stripped down version of the Bash command 'rm'
  *
  * @author	Jackson Butler
  * @since 	Feb 25, 2025
  */
-
-import org.fusesource.jansi.Ansi;
-import java.io.File;
-
 public class Rm extends ShellCommand{
 
 	/**
