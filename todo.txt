@@ -12,9 +12,10 @@ Grep.java
 Pwd.java
 Cat.java
 Mv.java
-Rm.java
 Cd.java
 Cp.java
 Ls.java
 
 COMPLETE:
+
+Rm.java
