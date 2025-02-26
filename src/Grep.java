@@ -87,8 +87,9 @@ public class Grep extends ShellCommand{
         if(arguments.length < 3){
             throw new ShellException("Invalid number of arguments for grep command");
         } else if (isFile(this.arguments[2])){
-            File file = new File(this.arguments[2]);
-            // 
+            String givenPath = this.arguments[2];
+            String fileName =ShellPath.buildPath(givenPath);
+            File file = new File(fileName);
             try(Scanner sc = new Scanner(file)){
                 while(sc.hasNext()){
                     String tmp = sc.nextLine();
@@ -117,7 +118,9 @@ public class Grep extends ShellCommand{
             throw new ShellException("Invalid number of arguments for grep command");
         }else{
             if(isFile(this.arguments[2])){
-                File file = new File(this.arguments[2]);
+                String givenPath = this.arguments[2];
+                String fileName =ShellPath.buildPath(givenPath);
+                File file = new File(fileName);
             // 
             try(Scanner sc = new Scanner(file)){
                 while(sc.hasNext()){
@@ -151,7 +154,9 @@ public class Grep extends ShellCommand{
         }else{
             int line_counter=0;
             if(isFile(this.arguments[2])){   
-            File file = new File(this.arguments[2]);
+                String givenPath = this.arguments[2];
+                String fileName =ShellPath.buildPath(givenPath);
+                File file = new File(fileName);
             // 
             try(Scanner sc = new Scanner(file)){
                 while(sc.hasNext()){

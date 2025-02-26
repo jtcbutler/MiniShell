@@ -3,7 +3,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Set;
 
 public class Ls extends ShellCommand{
@@ -18,6 +20,7 @@ public class Ls extends ShellCommand{
             String currentPath = System.getProperty("user.dir");
             File directory = new File(currentPath);
             File[] files = directory.listFiles();
+            Arrays.sort(files);
 
             // print the files and directories
             if(files != null){
@@ -65,17 +68,36 @@ public class Ls extends ShellCommand{
         if (this.arguments.length == 2){
             String givenPath = this.arguments[1];
             currentPath =ShellPath.buildPath(givenPath);
+            // how to check if it is a currect path
 
         }else{
             currentPath = System.getProperty("user.dir");
         }
+
         File directory = new File(currentPath);
         File[] files = directory.listFiles();
+        Arrays.sort(files);
+        
+        if(!directory.exists()){
+            throw new ShellException("No such file or directory");
+        }
 
+        Arrays.sort(files);
+        Ansi fileColor;
         if(files != null){
             for(File file : files){
-                total_return += file.getName() + " ";
-            }
+                if (file.isDirectory()) {
+                    fileColor = Ansi.ansi().fg(Ansi.Color.BLUE).bold();  // blue -Directory
+                } else if (file.canExecute()) {
+                    fileColor = Ansi.ansi().fg(Ansi.Color.GREEN).bold(); // green-Executable
+                } else {
+                    fileColor = Ansi.ansi().fg(Ansi.Color.WHITE);        // white-File
+                }
+    
+                total_return+=(fileColor.render(file.getName()))
+                           +(" ")
+                           +(Ansi.ansi().reset());  // reset color
+                        }
         }
 
         return total_return + "\n";
@@ -94,6 +116,13 @@ public class Ls extends ShellCommand{
             
         File directory = new File(fullPath);
         File[] files = directory.listFiles();
+
+        Arrays.sort(files);
+
+        if(!directory.exists()){
+            throw new ShellException("No such file or directory");
+        }
+
 
         if(files != null){
             for(File file : files){
@@ -219,7 +248,13 @@ public class Ls extends ShellCommand{
         }
             
         File directory = new File(fullPath);
+        if(!directory.exists()){
+            throw new ShellException("No such file or directory");
+        }
         File[] files = directory.listFiles();
+
+        Arrays.sort(files);
+
         if(files != null){
             for(File file : files){
                 if(!file.isHidden()){
@@ -305,8 +340,17 @@ public class Ls extends ShellCommand{
                     total_return+=" ";
 
                     //size
-                    total_return+=Files.size(file_path);
-                    total_return+="B";
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    if(file.length()<1024){
+                        total_return+=Files.size(file_path);
+                        total_return+="B";
+                        }else if(file.length()<1024*1024){
+                            total_return+=df.format(Files.size(file_path)/1024.0);
+                            total_return+="K";
+                            }else{
+                                total_return+=df.format(Files.size(file_path)/(1024.0*1024.0));
+                                total_return+="M";
+                            }
                     total_return+=" ";
 
                     // last modified time
@@ -329,6 +373,14 @@ public class Ls extends ShellCommand{
 
 	protected String help(){
 		return Ansi.ansi().fgYellow().render(""
+        + "Usage: ls [OPTION]...\n"
+        + "List information about the FILEs (the current directory by default).\n"
+		+ "Example: ls -l\n"
+		+ "\n"
+		+ "Word selection and interpretation:\n"
+		+ MiniShell.INDENT + "-A,  --all the files          list all files including hidden files\n"
+		+ MiniShell.INDENT + "-l,  --more information       use a long listing format\n"
+		+ MiniShell.INDENT + "-lh, --human-readable         with -l, print sizes in human readable format (e.g., 1K 234M 2G)\n"
 		).fgDefault().toString();
 	}
 }
