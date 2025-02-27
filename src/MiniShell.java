@@ -3,6 +3,12 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Arrays;
 
+/**
+ * A barebones recreation of Bash
+ *
+ * @authors Jackson Butler, Jiafeng Gu
+ * @date	Feb 27, 2025
+ */
 public class MiniShell {
 	public static final String NAME = "msh";
 	public static final String INDENT = "  ";

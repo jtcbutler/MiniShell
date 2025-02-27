@@ -2,7 +2,7 @@
  * A barebones exception type used throughout the MiniShell to improve clarity
  * Serial warning is suppressed for this class as it is not intended to be serialized
  *
- * @authors Jackson Butler,Jiafeng Gu
+ * @authors Jackson Butler, Jiafeng Gu
  * @since	Feb 25, 2025
  */
 @SuppressWarnings("serial")
