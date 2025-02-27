@@ -1,7 +1,7 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Arrays;
 
 public class MiniShell {
 	public static final String NAME = "msh";
@@ -23,6 +23,7 @@ public class MiniShell {
 		this.commandMap.put("rm", new Rm());
 		this.commandMap.put("mv", new Mv());
 		this.commandMap.put("cp", new Cp());
+		this.commandMap.put("ps",new Ps());
 	}
 
 	/**
