@@ -1,37 +1,73 @@
-import java.io.File;
-import java.io.IOException;
 import org.fusesource.jansi.Ansi;
+import java.io.IOException;
+import java.io.File;
 
+/**
+ * A stripped down version of the Bash command 'touch'
+ *
+ * @author	Jackson Butler
+ * @date 	Feb 26, 2025
+ */
 public class Touch extends ShellCommand {
+
+	/**
+	 * Create a new Touch command
+	 */
+	public Touch(){}
+
+	/**
+	 * Iterate through arguments
+	 * Interpret each argument as a filepath
+	 * Create a new new file for each filepath
+	 *
+	 * @return an empty String
+	 * @throws ShellException If no arguments are supplied
+	 * @throws ShellException If ShellPath.buildPath() fails
+	 * @throws ShellException If any of the supplied files already exist
+	 * @throws ShellException If any of the supplied files are unable to be created for any other reason
+	*/
 	@Override
 	protected String processCommand() throws ShellException {
 
-		if(arguments.length < 1){
-			throw new ShellException("touch: Missing file operand");
+		// if no arguments were provided
+		// throw a new ShellException
+		if(arguments.length == 0){
+			throw new ShellException("touch: missing file operand");
 		}
 
-		if(arguments[0].equals("--help") || arguments[0].equals("-h")){
-			return help();
-		}
-		else{
-			for(String filename : arguments){
-				try {
-					File file = new File(ShellPath.buildPath(filename));
-					if(!file.exists()){
-						file.createNewFile();
-					}
-					else{
-						throw new ShellException("touch: " + filename + ": File already exists");
-					}
-				} 
-				catch (IOException e) {
-					throw new ShellException("touch: Failed to create file '" + filename + "'");
+		// for each argument in arguments
+		for(String filename : arguments){
+			try {
+				File file = new File(ShellPath.buildPath(filename));
+
+				// if the file does not always exist
+				// create file
+				if(!file.exists()){
+					file.createNewFile();
 				}
+
+				// otherwise, throw new ShellException
+				else{
+					throw new ShellException("touch: " + filename + ": file already exists");
+				}
+			} 
+
+			// if an error occured during file creation
+			// throw a new ShellException
+			catch (IOException e) {
+				throw new ShellException("touch: failed to create file '" + filename + "'");
 			}
-			return "";
 		}
+
+		// this command does not print any text
+		return "";
 	}
 
+	/**
+	 * Return text explaining the intended use of this command
+	 *
+	 * @return String the explanation
+	*/
 	@Override
 	protected String help(){
 		return Ansi.ansi().fgYellow().render(""

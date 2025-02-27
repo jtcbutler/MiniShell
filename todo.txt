@@ -5,7 +5,6 @@ Grep.java
 Cat.java
 Ls.java
 
-Touch.java
 Mkdir.java
 
 COMPLETE:
@@ -15,6 +14,7 @@ ShellCommand.java
 ShellPath.java
 Clear.java
 Rmdir.java
+Touch.java
 Pwd.java
 Rm.java
 Cd.java
