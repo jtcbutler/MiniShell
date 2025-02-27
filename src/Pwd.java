@@ -1,5 +1,3 @@
-import org.fusesource.jansi.Ansi;
-
 /**
  * A stripped down version of the Bash command 'pwd'
  *
