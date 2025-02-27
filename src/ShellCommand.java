@@ -67,11 +67,20 @@ abstract public class ShellCommand {
 	abstract protected String processCommand() throws ShellException;
 
 	/**
-	 * Explain the intended use of this command
+	 * Return a String of help text
 	 *
-	 * @return an explanation of the command
+	 * @return a String of help text
+	 */
+	abstract protected String getHelpText();
+
+	/**
+	 * Format a String of help text
+	 *
+	 * @return the formatted help text
 	*/
-	abstract protected String help();
+	private String help(){
+		return ShellFormatter.colorText(getHelpText(), 255, 255, 0);
+	}
 
 	/**
 	 * Determine if arguments contains a help flag

@@ -1,4 +1,3 @@
-import org.fusesource.jansi.Ansi;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.File;
@@ -16,22 +15,12 @@ public class Mv extends ShellCommand{
 	 */
 	public Mv(){}
 
-	/**
-	 * Move a single file/directory or a list of files/directories to a specified path
-	 *
-	 * @return an empty String
-	 */
 	@Override
 	protected String processCommand() throws ShellException{
 
-		// if no arguments were provided
-		// throw a new ShellException
 		if(arguments.length == 0){
 			throw new ShellException("mv: Missing file operand");
 		}
-
-		// if only one argument was provided
-		// throw a new ShellException
 		else if(arguments.length == 1){
 			throw new ShellException("mv: Missing destination file operand after '" + arguments[0] + "'");
 		}
@@ -42,8 +31,6 @@ public class Mv extends ShellCommand{
 			File source = new File(ShellPath.buildPath(arguments[0]));
 			File destination = new File(ShellPath.buildPath(arguments[1]));
 
-			// if the source does not exist
-			// throw a new ShellException
 			if(!source.exists()){
 				throw new ShellException("mv: '" + arguments[0] + "' is not a file or directory");
 			}
@@ -65,24 +52,16 @@ public class Mv extends ShellCommand{
 		// if more than two arguments were provided
 		// the destination must be a directory
 		else{
-
-			// the destination directory is the final argument
 			String destinationPath = ShellPath.buildPath(arguments[arguments.length - 1]);
 
-			// if the destination is not a directory
-			// throw a new ShellException
 			if(!Files.isDirectory(Paths.get(destinationPath))){
 				throw new ShellException("mv: '" + arguments[arguments.length - 1] + "' is not a directory");
 			}
 
 			// for each argument (excluding the final argument)
 			for(int i = 0; i < arguments.length - 1; i++){
-
-				// interpret the argument as a file
 				File source = new File(ShellPath.buildPath(arguments[i]));
 
-				// if the file does not exist
-				// throw a new ShellException
 				if(!source.exists()){
 					throw new ShellException("mv: '" + arguments[i] + "' is not a file or directory");
 				}
@@ -103,16 +82,10 @@ public class Mv extends ShellCommand{
 		return "";
 	}
 
-	/**
-	 * Return text explaining the intended use of this command
-	 *
-	 * @return String the explanation
-	*/
 	@Override
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
-			+ "Usage: mv SOURCE DEST or mv SOURCE... DIRECTORY\n"
-			+ "Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY.\n"
-		).fgDefault().toString();
+	protected String getHelpText(){
+		return ""
+		+ "Usage: mv SOURCE DEST or mv SOURCE... DIRECTORY\n"
+		+ "Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY.\n";
 	}
 }

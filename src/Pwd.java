@@ -13,25 +13,15 @@ public class Pwd extends ShellCommand {
 	 */
 	public Pwd(){}
 
-	/**
-	 * Retrieve the String path of the current working directory
-	 *
-	 * @return the path of the current working directory
-	 */
 	@Override
 	protected String processCommand() throws ShellException {
 		return System.getProperty("user.dir") + "\n";
 	}
 
-	/**
-	 * Return text explaining the intended use of this command
-	 *
-	 * @return String the explanation
-	*/
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
+	@Override
+	protected String getHelpText(){
+		return ""
 		+ "pwd: pwd\n"
-		+ "Print the name of the current working directory.\n"
-		).fgDefault().toString();
+		+ "Print the name of the current working directory.\n";
 	}
 }

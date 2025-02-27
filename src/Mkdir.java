@@ -13,30 +13,13 @@ public class Mkdir extends ShellCommand {
 	 */
 	public Mkdir(){}
 
-	/**
-	 * Iterate through arguments
-	 * Interpret each argument as a filepath
-	 * Attempt to create the directory indicated by each filepath
-	 *
-	 * @return an empty String
-	 * @throws ShellException If no arguments are provided
-	 * @throws ShellException If ShellPath.buildPath() fails
-	 * @throws ShellException If unable to create any of the supplied directories
-	 * @throws ShellException If any of the supplied arguments are unable to be deleted (likely due to a lack of permission)
-	*/
 	protected String processCommand() throws ShellException {
 
-		// if no arguments were provided
-		// throw a new shell exception
 		if (arguments.length == 0) {
 			throw new ShellException("mkdir: missing operand");
 		}
 
-		// for each argument
 		for (String filename : arguments) {
-
-			// attempt to create new directory
-			// throw a new ShellException upon failure
 			if (!(new File(ShellPath.buildPath(filename)).mkdir())) {
 				throw new ShellException("mkdir: failed to create directory '" + filename + "'");
 			}
@@ -46,12 +29,10 @@ public class Mkdir extends ShellCommand {
 		return "";
 	}
 
-	/**
-	 * Return text explaining the intended use of this command
-	 *
-	 * @return String the explanation
-	*/
-	protected String help() {
-		return null;
+	@Override
+	protected String getHelpText(){
+		return ""
+		+ "Usage: mkdir [OPTION]... DIRECTORY..."
+		+ "Create the DIRECTORY(ies), if they do not already exist.";
 	}
 }

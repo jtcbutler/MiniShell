@@ -1,5 +1,3 @@
-import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.Ansi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -34,7 +32,6 @@ public class MiniShell {
 	public void run(){
 
 		//allocate resources
-		AnsiConsole.systemInstall();
 		Scanner scanner = new Scanner(System.in);
 
 		while(true){
@@ -44,7 +41,7 @@ public class MiniShell {
 				// read input from the user
 				// split the input on whitespace
 				// store the result in an array
-				System.out.print(Ansi.ansi().bold().render(PROMPT).boldOff());
+				System.out.print(ShellFormatter.boldText(PROMPT));
 				String[] inputSegments = (scanner.nextLine().split("\\s+"));
 
 				// if the first word of the input was "exit"
@@ -68,7 +65,10 @@ public class MiniShell {
 					output = executeSolo(inputSegments, false);
 				}
 
-				System.out.print(Ansi.ansi().cursorUp(1).fgGreen().bold().render(PROMPT).fgDefault().boldOff().cursorDown(1).cursorLeft(PROMPT.length()));
+				System.out.print(ShellFormatter.moveCursorUp(1));
+				System.out.print(ShellFormatter.boldText(ShellFormatter.colorText(PROMPT, 0, 255, 0)));
+				System.out.print(ShellFormatter.moveCursorDown(1));
+				System.out.print(ShellFormatter.moveCursorLeft(PROMPT.length()));
 				System.out.print(output);
 			}
 
@@ -76,14 +76,16 @@ public class MiniShell {
 			// color the prompt of the command that caused the error red
 			// print the errors message and then continue with the loop
 			catch(ShellException e){
-				System.out.print(Ansi.ansi().cursorUp(1).fgRed().bold().render(PROMPT).fgDefault().boldOff().cursorDown(1).cursorLeft(PROMPT.length()));
+				System.out.print(ShellFormatter.moveCursorUp(1));
+				System.out.print(ShellFormatter.boldText(ShellFormatter.colorText(PROMPT, 255, 0, 0)));
+				System.out.print(ShellFormatter.moveCursorDown(1));
+				System.out.print(ShellFormatter.moveCursorLeft(PROMPT.length()));
 				System.out.println(NAME + ": " + e.getMessage());
 			}
 		}
 
 		// free resources
 		scanner.close();
-		AnsiConsole.systemInstall();
 	}
 
 	/**
