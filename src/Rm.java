@@ -10,11 +10,17 @@ import java.io.File;
 public class Rm extends ShellCommand{
 
 	/**
-	 * Iterate through <arguments>
+	 * Create a new Rm command
+	 */
+	public Rm(){}
+
+	/**
+	 * Iterate through arguments
 	 * Interpret each argument as a filepath
 	 * Attempt to remove the file indicated by each filepath
 	 *
 	 * @return String an empty String
+	 * @throws ShellException If ShellPath.buildPath() fails
 	 * @throws ShellException If any of the supplied arguments do not exist in the users filesystem
 	 * @throws ShellException If any of the supplied arguments are non-regular files (e.g. directory)
 	 * @throws ShellException If any of the supplied arguments are unable to be deleted (likely due to a lack of permission)
@@ -38,10 +44,8 @@ public class Rm extends ShellCommand{
 
 			// otherwise, attempt to delete the file and continue
 			// throw exception if the deletion is unsuccessful
-			else{
-				if(!file.delete()){
-					throw new ShellException("rm: cannot remove '" + argument + "': Permission denied");
-				}
+			else if(!file.delete()){
+				throw new ShellException("rm: cannot remove '" + argument + "': Permission denied");
 			}
 		}
 

@@ -1,7 +1,7 @@
 import org.fusesource.jansi.Ansi;
 
 /**
- * A stripped down version of the Bash command 'cp'
+ * A stripped down version of the Bash command 'pwd'
  *
  * @author	Jackson Butler
  * @date 	Feb 26, 2025

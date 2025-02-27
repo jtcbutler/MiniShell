@@ -6,7 +6,6 @@ Cat.java
 Ls.java
 
 Touch.java
-Rmdir.java
 Mkdir.java
 
 COMPLETE:
@@ -15,8 +14,9 @@ ShellException.java
 ShellCommand.java
 ShellPath.java
 Clear.java
+Rmdir.java
+Pwd.java
 Rm.java
 Cd.java
 Cp.java
-Pwd.java
 Mv.java
