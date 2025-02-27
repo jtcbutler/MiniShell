@@ -1,9 +1,20 @@
 import java.util.Scanner;
-import org.fusesource.jansi.Ansi;
 import java.io.File;
 
 
+/**
+ * A stripped down version of the Bash command 'grep'
+ *
+ * @author	Jiafeng Gu
+ * @date 	Feb 27, 2025
+ */
 public class Grep extends ShellCommand{
+
+	/**
+	 * Create a new Grep command
+	 */
+	public Grep(){}
+
     /**
      * This method is called when the user types "grep" in the command line.
      * @return the output of the command
@@ -101,8 +112,6 @@ public class Grep extends ShellCommand{
             return total_return;
         }
     }
-
-
 
     /**
      * This method executes the grep command with the -i flag.

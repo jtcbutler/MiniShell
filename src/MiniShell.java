@@ -1,7 +1,7 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Arrays;
 
 /**
  * A barebones recreation of Bash
@@ -10,12 +10,30 @@ import java.util.Scanner;
  * @date	Feb 27, 2025
  */
 public class MiniShell {
+
+	/**
+	 * The name of the shell, as displayed in the shell
+	 */
 	public static final String NAME = "msh";
+
+	/**
+	 * The standard indent within the shell
+	 */
 	public static final String INDENT = "  ";
+
+	/**
+	 * The shells command prompt
+	 */
 	public static final String PROMPT = NAME+"> ";
 
+	/**
+	 * HashMap for easy access to implemented commands
+	 */
 	private final HashMap<String, ShellCommand> commandMap = new HashMap<>();
 
+	/**
+	 * Create a new MiniShell
+	 */
 	public MiniShell(){
 		this.commandMap.put("clear", new Clear());
 		this.commandMap.put("mkdir", new Mkdir());
@@ -99,6 +117,7 @@ public class MiniShell {
 	 * Execute a single command.
 	 *
 	 * @param command an array holding the commands name and its arguments
+	 * @param isPiped indication of whether or not this command is piped
 	 * @return the String output of the command that was run 
 	 * @throws ShellException if the command was not found or failed
 	*/
@@ -149,6 +168,13 @@ public class MiniShell {
 		return output;
 	}
 
+	/**
+	 * Split an array of arguments into a 2d array of seperate commands
+	 *
+	 * @param inputSegments the array of aruments
+	 * @return the array of arguments seperated into commands
+	 * @throws ShellException if a syntax error is found
+	*/
 	private static String[][] splitPipedInput(String inputSegments[]) throws ShellException {
 		ArrayList<String[]> pipeSegments = new ArrayList<>();
 		int segmentStart = 0;
@@ -169,6 +195,11 @@ public class MiniShell {
 		return pipeSegments.toArray(new String[0][0]);
 	}
 
+	/**
+	 * Run the program
+	 *
+	 * @param args command line arguments
+	*/
     public static void main(String[] args) {
 		new MiniShell().run();
     }

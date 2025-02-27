@@ -1,37 +1,50 @@
+import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
+/**
+ * A ShellCommand wrapper for the Bash command 'ps'
+ *
+ * @author	Jiafeng Gu
+ * @date 	Feb 27, 2025
+ */
 public  class Ps extends ShellCommand {
-    @Override
+
+	/**
+	 * Create a new Ps command
+	*/
+	public Ps(){}
+
+	@Override
 	protected String processCommand() throws ShellException{
-        Runtime runtime = Runtime.getRuntime();
-        Process process;
-        try {
-            // common exec("ps") is deprecated, change ps to string[]
-            String[] command = {"ps"};
-            process = runtime.exec(command);
-        } catch (IOException e) {
-            throw new ShellException("Error executing ps command");
-        }
+		Runtime runtime = Runtime.getRuntime();
+		Process process;
+		try {
+			// common exec("ps") is deprecated, change ps to string[]
+			String[] command = {"ps"};
+			process = runtime.exec(command);
+		} catch (IOException e) {
+			throw new ShellException("Error executing ps command");
+		}
 
-        String line;
-        StringBuilder output = new StringBuilder();
-        try {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        while ((line = reader.readLine())!= null) {
-            output.append(line).append("\n");
-        }
-            reader.close();
-        } catch (IOException e) {
-            throw new ShellException("Error reading ps output");
-        }
+		String line;
+		StringBuilder output = new StringBuilder();
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			while ((line = reader.readLine())!= null) {
+				output.append(line).append("\n");
+			}
+			reader.close();
+			process.destroy();
+		} catch (IOException e) {
+			throw new ShellException("Error reading ps output");
+		}
 
-    
-        return output.toString();
-    }
 
-    @Override
+		return output.toString();
+	}
+
+	@Override
 	protected String getHelpText(){
 		return ""
 		+ "ps: ps\n"

@@ -62,6 +62,22 @@ public class Cat extends ShellCommand {
 		}
 	}
 
+	@Override
+	protected String getHelpText(){
+		return ""
+		+ "Usage: cat [OPTION]... [FILE]...\n"
+		+ "Concatenate FILE(s) to standard output.\n"
+		+ "\n"
+		+ "-b, --number-nonblank      number nonempty output lines, overrides -n\n"
+		+ "-s, --squeeze-blank        suppress repeated empty output lines\n"
+		+ "-E, --show-ends            display $ at end of each line\n"
+		+ "-n, --number               number all output lines\n"
+		+ "\n"
+		+ "Examples:\n"
+		+ MiniShell.INDENT + "cat a      Output a's contents\n"
+		+ MiniShell.INDENT + "cat a b    Output a's contents concatentated with b's contents\n";
+	}
+
 	/**
 	 * Iterate through arguments searching for flags
 	 * If a flag is found, set its value to true within flagMap
@@ -155,7 +171,15 @@ public class Cat extends ShellCommand {
 		return recombine(lines);
 	}
 
-
+	/**
+	 * Read the contents of an array of filepaths into a String array
+	 *
+	 * @param inputs the array of filepaths
+	 * @return contents of the specified files as lines
+	 * @throws ShellException if ShellPath.buildPath() fails
+	 * @throws ShellException if any of the specified files are directories
+	 * @throws ShellException if any of the specified files do not exist or cannot be opened
+	*/
 	private String[] assembleBase(String[] inputs) throws ShellException {
 		ArrayList<ArrayList<String>> inputLines = new ArrayList<>();
 
@@ -174,6 +198,8 @@ public class Cat extends ShellCommand {
 				throw new ShellException("cat: " + inputs[i] + ": is a directory");
 			}
 
+			// read the entire file into lines
+			// increment numberOfLines with each added line
 			try(Scanner scanner = new Scanner(file)){
 				while(scanner.hasNextLine()){
 					lines.add(scanner.nextLine());
@@ -184,21 +210,29 @@ public class Cat extends ShellCommand {
 				throw new ShellException("cat: '" + inputs[i] + "': does not exist");
 			}
 
+			// add lines (the contents of the current file) to inputLines
 			inputLines.add(lines);
 		}
 
 		String[] base;
 		int baseIndex;
+
+		// if the final element is a String litteral
+		// split it on the newlines
+		// store the contents in an array large enough to accomodate all other lines
 		if(isPiped){
 			base = inputs[inputs.length - 1].split("\n");
 			base = Arrays.copyOf(base, base.length + numberOfLines);
 			baseIndex = base.length - numberOfLines;
 		}
+
+		// otherwise, create an array large enough to accomodate the contents of inputLines
 		else{
 			base = new String[numberOfLines];
 			baseIndex = 0;
 		}
 
+		// copy the content of inputLines into base
 		for(int i = 0; i < inputLines.size(); i++){
 			for(String line : inputLines.get(i)){
 				base[baseIndex] = line;
@@ -209,6 +243,105 @@ public class Cat extends ShellCommand {
 		return base;
 	}
 
+	/**
+	 * Remove contiguous empty lines from an array of Strings
+	 *
+	 * @param lines the array of Strings
+	 *
+	 * WARNING: after calling this command, some elements of lines may be null
+	 *			from this point on, there will be a null check in all commands dealling with this return value
+	*/
+	private void squeezeBlank(String[] lines){
+		boolean previousLineWasBlank = false;
+
+		for(int i = 0; i < lines.length; i++){
+
+			if(lines[i].isEmpty()){
+
+				// if the current lines is empty and the previous line was empty
+				if(previousLineWasBlank){
+					lines[i] = null;
+				}
+				else{
+					previousLineWasBlank = true;
+				}
+			}
+
+			// if the current line is not empty
+			else{
+				previousLineWasBlank = false;
+			}
+		}
+	}
+
+	/**
+	 * Append '$' to each element in a String array
+	 *
+	 * @param lines the String array
+	*/
+	private void showEnds(String[] lines){
+		for(int i = 0; i < lines.length; i++){
+			if(lines[i] != null){
+				lines[i] = lines[i] + "$";
+			}
+		}
+	}
+
+	/**
+	 * Prepend ascending numbers to the elements of a String array
+	 *
+	 * @param lines the String array
+	 * @param nonblank should blank lines be skipped (true if so
+	*/
+	private void number(String[] lines, boolean nonblank){
+
+		// determine the number of lines
+		// this is used to determine the size of indentation
+		int lineNumber = 0;
+		for(String line : lines){
+			if(line != null){
+				lineNumber++;
+			}
+		}
+
+		// calculate the size of the indent (enough to accomodate all line numbers + MiniShell.INDENT)
+		int indent = String.valueOf(lineNumber).length() + MiniShell.INDENT.length();
+		
+
+		StringBuilder builder = new StringBuilder();
+		lineNumber = 1;
+		for(int i = 0; i < lines.length; i++){
+
+			// if nonblank is true
+			// check that the current line is not empty
+			// otherwise, proceed without a check
+			if(lines[i] != null && (nonblank ? !lines[i].isEmpty() : true)){
+				builder.setLength(0);
+				String lineNumberText = String.valueOf(lineNumber);
+
+				// append the proper number of spaces prior to the line number
+				for(int j = 0; j < indent - lineNumberText.length(); j++){
+					builder.append(" ");
+				}
+
+				// append the line number
+				builder.append(lineNumberText);
+
+				// prepend the indented line number to this line
+				lines[i] = builder.toString() + MiniShell.INDENT + lines[i];
+
+				lineNumber++;
+			}
+		}
+	}
+
+	/**
+	 * Combine an array of Strings into a single String
+	 * Seperate each String with a newline
+	 *
+	 * @param base the array of Strings
+	 * @return the combined String
+	*/
 	private String recombine(String[] base){
 		StringBuilder builder = new StringBuilder();
 		for(String line : base){
@@ -218,73 +351,5 @@ public class Cat extends ShellCommand {
 			}
 		}
 		return builder.toString();
-	}
-
-	private void squeezeBlank(String[] lines){
-		boolean previousLineWasBlank = false;
-
-		for(int i = 0; i < lines.length; i++){
-			if(lines[i].isEmpty()){
-				if(previousLineWasBlank){
-					lines[i] = null;
-				}
-				else{
-					previousLineWasBlank = true;
-				}
-			}
-			else{
-				previousLineWasBlank = false;
-			}
-		}
-	}
-
-	private void showEnds(String[] lines){
-		for(int i = 0; i < lines.length; i++){
-			if(lines[i] != null){
-				lines[i] = lines[i] + "$";
-			}
-		}
-	}
-
-	private void number(String[] lines, boolean nonblank){
-		int lineNumber = 0;
-		for(String line : lines){
-			if(line != null){
-				lineNumber++;
-			}
-		}
-
-		int indent = String.valueOf(lineNumber).length() + MiniShell.INDENT.length();
-		StringBuilder builder = new StringBuilder();
-		lineNumber = 1;
-
-		for(int i = 0; i < lines.length; i++){
-			if(lines[i] != null && (nonblank ? !lines[i].isEmpty() : true)){
-				builder.setLength(0);
-				String lineNumberText = String.valueOf(lineNumber);
-				for(int j = 0; j < indent - lineNumberText.length(); j++){
-					builder.append(" ");
-				}
-				builder.append(lineNumberText);
-				lines[i] = builder.toString() + MiniShell.INDENT + lines[i];
-				lineNumber++;
-			}
-		}
-	}
-
-	@Override
-	protected String getHelpText(){
-		return ""
-		+ "Usage: cat [OPTION]... [FILE]...\n"
-		+ "Concatenate FILE(s) to standard output.\n"
-		+ "\n"
-		+ "-b, --number-nonblank      number nonempty output lines, overrides -n\n"
-		+ "-s, --squeeze-blank        suppress repeated empty output lines\n"
-		+ "-E, --show-ends            display $ at end of each line\n"
-		+ "-n, --number               number all output lines\n"
-		+ "\n"
-		+ "Examples:\n"
-		+ MiniShell.INDENT + "cat a      Output a's contents\n"
-		+ MiniShell.INDENT + "cat a b    Output a's contents concatentated with b's contents\n";
 	}
 }

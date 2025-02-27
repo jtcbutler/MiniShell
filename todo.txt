@@ -1,6 +1,0 @@
-INCOMPLETE:
-
-MiniShell.java
-Grep.java
-Cat.java
-Ls.java

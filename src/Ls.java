@@ -7,7 +7,19 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Set;
 
+/**
+ * A stripped down version of the Bash command 'ls'
+ *
+ * @author	Jiafeng Gu
+ * @date 	Feb 27, 2025
+ */
 public class Ls extends ShellCommand{
+
+	/**
+	 * Create a new Ls command
+	 */
+	public Ls(){}
+
     /**
      * This method is used to execute the ls command. It takes in an array of arguments and returns a string of the output of the ls command.
      * @return A string of the output 
