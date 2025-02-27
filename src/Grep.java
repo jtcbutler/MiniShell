@@ -1,7 +1,6 @@
 import java.util.Scanner;
 import java.io.File;
 
-
 /**
  * A stripped down version of the Bash command 'grep'
  *

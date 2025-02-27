@@ -306,10 +306,9 @@ public class Cat extends ShellCommand {
 
 		// calculate the size of the indent (enough to accomodate all line numbers + MiniShell.INDENT)
 		int indent = String.valueOf(lineNumber).length() + MiniShell.INDENT.length();
-		
 
-		StringBuilder builder = new StringBuilder();
 		lineNumber = 1;
+		StringBuilder builder = new StringBuilder();
 		for(int i = 0; i < lines.length; i++){
 
 			// if nonblank is true
