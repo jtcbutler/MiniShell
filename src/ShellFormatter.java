@@ -1,4 +1,3 @@
-import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.Ansi;
 
 /**
@@ -8,11 +7,6 @@ import org.fusesource.jansi.Ansi;
  * @date	Feb 26, 2025	
  */
 public class ShellFormatter{
-
-	/**
-	 * Indicates whether or not there is currently an instance of AnsiConsole installed
-	*/
-	private static boolean running;
 
 	/**
 	 * Private constructor
