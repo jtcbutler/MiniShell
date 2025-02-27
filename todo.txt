@@ -5,8 +5,6 @@ Grep.java
 Cat.java
 Ls.java
 
-Mkdir.java
-
 COMPLETE:
 
 ShellException.java
@@ -14,6 +12,7 @@ ShellCommand.java
 ShellPath.java
 Clear.java
 Rmdir.java
+Mkdir.java
 Touch.java
 Pwd.java
 Rm.java
