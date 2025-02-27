@@ -9,7 +9,6 @@ Touch.java
 Rmdir.java
 Mkdir.java
 Pwd.java
-Cp.java
 
 COMPLETE:
 
@@ -19,4 +18,5 @@ ShellPath.java
 Clear.java
 Rm.java
 Cd.java
+Cp.java
 Mv.java

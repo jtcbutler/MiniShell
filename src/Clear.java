@@ -4,7 +4,7 @@ import org.fusesource.jansi.Ansi;
  * A stripped down version of the Bash command 'clear'
  *
  * @author	Jackson Butler
- * @since 	Feb 26, 2025
+ * @date 	Feb 26, 2025
  */
 public class Clear extends ShellCommand {
 

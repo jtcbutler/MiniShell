@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Non-instantiable class that provides utilities for path manipulation
  *
  * @author	Jackson Butler
- * @since	Feb 26, 2025	
+ * @date	Feb 26, 2025	
  */
 public class ShellPath{
 
@@ -129,11 +129,12 @@ public class ShellPath{
 	 *
 	 * @param path the path whos final element should be extracted
 	 * @return the extracted element or null if unavailable
+	 * @throws ShellException if buildPath() fails
 	*/
-	public static String getLast(String path){
+	public static String getLast(String path) throws ShellException{
 
-		// split the path on FILE_SEPARATOR
-		String[] components = path.split(FILE_SEPARATOR_PATTERN);
+		// sanatize path and split on FILE_SEPARATOR
+		String[] components = buildPath(path).split(FILE_SEPARATOR_PATTERN);
 
 		// return the final element of the resulting array or null
 		if(components.length > 0){

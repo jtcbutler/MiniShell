@@ -5,7 +5,7 @@ import java.io.File;
  * A stripped down version of the Bash command 'rm'
  *
  * @author	Jackson Butler
- * @since 	Feb 25, 2025
+ * @date 	Feb 25, 2025
  */
 public class Rm extends ShellCommand{
 

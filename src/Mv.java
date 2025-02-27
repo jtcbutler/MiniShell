@@ -1,11 +1,13 @@
 import org.fusesource.jansi.Ansi;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.File;
 
 /**
  * A stripped down version of the Bash command 'mv'
  *
  * @author	Jackson Butler
- * @since 	Feb 26, 2025
+ * @date 	Feb 26, 2025
  */
 public class Mv extends ShellCommand{
 
@@ -69,7 +71,7 @@ public class Mv extends ShellCommand{
 
 			// if the destination is not a directory
 			// throw a new ShellException
-			if(!(new File(destinationPath).isDirectory())){
+			if(!Files.isDirectory(Paths.get(destinationPath))){
 				throw new ShellException("mv: '" + arguments[arguments.length - 1] + "' is not a directory");
 			}
 

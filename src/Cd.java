@@ -5,7 +5,7 @@ import java.io.File;
  * A stripped down version of the Bash command 'cd'
  *
  * @author	Jackson Butler
- * @since	Feb 26, 2025
+ * @date	Feb 26, 2025
  */
 public class Cd extends ShellCommand{
 

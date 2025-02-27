@@ -3,7 +3,7 @@
  * Serial warning is suppressed for this class as it is not intended to be serialized
  *
  * @authors Jackson Butler,
- * @since	Feb 25, 2025
+ * @date	Feb 25, 2025
  */
 @SuppressWarnings("serial")
 public class ShellException extends Exception {
