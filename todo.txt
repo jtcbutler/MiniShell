@@ -8,7 +8,6 @@ Ls.java
 Touch.java
 Rmdir.java
 Mkdir.java
-Pwd.java
 
 COMPLETE:
 
@@ -19,4 +18,5 @@ Clear.java
 Rm.java
 Cd.java
 Cp.java
+Pwd.java
 Mv.java
