@@ -1,4 +1,3 @@
-import org.fusesource.jansi.Ansi;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,9 +35,6 @@ public class Ls extends ShellCommand{
             }
             }
             return total_return + "\n";
-
-        }else if (this.arguments[0].equals("--help") || this.arguments[0].equals("-h")) {
-            return help();
 		}else if (this.arguments[0].equals("-A")) {
             return execute_Ls_A();
         } else if (this.arguments[0].equals("-l")) {
@@ -91,23 +87,20 @@ public class Ls extends ShellCommand{
             throw new ShellException("No such file or directory");
         }
 
-        Arrays.sort(files);
-        Ansi fileColor;
-        if(files != null){
-            for(File file : files){
-                if (file.isDirectory()) {
-                    fileColor = Ansi.ansi().fg(Ansi.Color.BLUE).bold();  // blue -Directory
-                } else if (file.canExecute()) {
-                    fileColor = Ansi.ansi().fg(Ansi.Color.GREEN).bold(); // green-Executable
-                } else {
-                    fileColor = Ansi.ansi().fg(Ansi.Color.WHITE);        // white-File
-                }
-    
-                total_return+=(fileColor.render(file.getName()))
-                           +(" ")
-                           +(Ansi.ansi().reset());  // reset color
-                        }
-        }
+		Arrays.sort(files);
+		if(files != null){
+			for(File file : files){
+				if (file.isDirectory()) {
+					total_return += ShellFormatter.boldText(ShellFormatter.colorText(file.getName(), 0, 0, 255));
+				} else if (file.canExecute()) {
+					total_return += ShellFormatter.boldText(ShellFormatter.colorText(file.getName(), 0, 255, 0));
+				} else {
+					total_return += file.getName();
+				}
+
+				total_return += " ";
+			}
+		}
 
         return total_return + "\n";
     }
@@ -390,16 +383,16 @@ public class Ls extends ShellCommand{
         return total_return +"\n";
     }
 
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
-        + "Usage: ls [OPTION]...\n"
-        + "List information about the FILEs (the current directory by default).\n"
+	@Override
+	protected String getHelpText(){
+		return ""
+		+ "Usage: ls [OPTION]...\n"
+		+ "List information about the FILEs (the current directory by default).\n"
 		+ "Example: ls -l\n"
 		+ "\n"
 		+ "Word selection and interpretation:\n"
 		+ MiniShell.INDENT + "-A,  --all the files          list all files including hidden files\n"
 		+ MiniShell.INDENT + "-l,  --more information       use a long listing format\n"
-		+ MiniShell.INDENT + "-lh, --human-readable         with -l, print sizes in human readable format (e.g., 1K 234M 2G)\n"
-		).fgDefault().toString();
+		+ MiniShell.INDENT + "-lh, --human-readable         with -l, print sizes in human readable format (e.g., 1K 234M 2G)\n";
 	}
 }

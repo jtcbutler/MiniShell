@@ -1,20 +1,25 @@
-import org.fusesource.jansi.Ansi;
-
+/**
+ * A stripped down version of the Bash command 'pwd'
+ *
+ * @author	Jackson Butler
+ * @date 	Feb 26, 2025
+ */
 public class Pwd extends ShellCommand {
+
+	/**
+	 * Create a new Pwd command
+	 */
+	public Pwd(){}
+
 	@Override
 	protected String processCommand() throws ShellException {
-		if(arguments.length > 0 && (arguments[0].equals("--help") || arguments[0].equals("-h"))){
-			return help();
-		}
-		else{
-			return System.getProperty("user.dir") + "\n";
-		}
+		return System.getProperty("user.dir") + "\n";
 	}
 
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
+	@Override
+	protected String getHelpText(){
+		return ""
 		+ "pwd: pwd\n"
-		+ "Print the name of the current working directory.\n"
-		).fgDefault().toString();
+		+ "Print the name of the current working directory.\n";
 	}
 }

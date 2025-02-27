@@ -1,42 +1,52 @@
-import java.io.File;
 import java.io.IOException;
-import org.fusesource.jansi.Ansi;
+import java.io.File;
 
+/**
+ * A stripped down version of the Bash command 'touch'
+ *
+ * @author	Jackson Butler
+ * @date 	Feb 26, 2025
+ */
 public class Touch extends ShellCommand {
+
+	/**
+	 * Create a new Touch command
+	 */
+	public Touch(){}
+
 	@Override
 	protected String processCommand() throws ShellException {
 
-		if(arguments.length < 1){
-			throw new ShellException("touch: Missing file operand");
+		if(arguments.length == 0){
+			throw new ShellException("touch: missing file operand");
 		}
 
-		if(arguments[0].equals("--help") || arguments[0].equals("-h")){
-			return help();
-		}
-		else{
-			for(String filename : arguments){
-				try {
-					File file = new File(ShellPath.buildPath(filename));
-					if(!file.exists()){
-						file.createNewFile();
-					}
-					else{
-						throw new ShellException("touch: " + filename + ": File already exists");
-					}
-				} 
-				catch (IOException e) {
-					throw new ShellException("touch: Failed to create file '" + filename + "'");
+		for(String filename : arguments){
+			try {
+				File file = new File(ShellPath.buildPath(filename));
+
+				// if the file does not always exist
+				// create file
+				if(!file.exists()){
+					file.createNewFile();
 				}
+				else{
+					throw new ShellException("touch: " + filename + ": file already exists");
+				}
+			} 
+			catch (IOException e) {
+				throw new ShellException("touch: failed to create file '" + filename + "'");
 			}
-			return "";
 		}
+
+		// this command does not print any text
+		return "";
 	}
 
 	@Override
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
-			+ "Usage: touch FILE...\n"
-			+ "Create a new empty file\n"
-		).fgDefault().toString();
+	protected String getHelpText(){
+		return ""
+		+ "Usage: touch FILE...\n"
+		+ "Create a new empty file\n";
 	}
 }

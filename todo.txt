@@ -1,21 +1,6 @@
 INCOMPLETE:
 
-ShellPath.java
 MiniShell.java
-Clear.java
-Mkdir.java
-Rmdir.java
-Touch.java
 Grep.java
-Pwd.java
 Cat.java
-Mv.java
-Cd.java
-Cp.java
 Ls.java
-
-COMPLETE:
-
-ShellException.java
-ShellCommand.java
-Rm.java

@@ -1,20 +1,25 @@
-import org.fusesource.jansi.Ansi;
-
+/**
+ * A stripped down version of the Bash command 'clear'
+ *
+ * @author	Jackson Butler
+ * @date 	Feb 26, 2025
+ */
 public class Clear extends ShellCommand {
+
+	/**
+	 * Create a new Clear command
+	 */
+	public Clear(){}
+
 	@Override
 	protected String processCommand() throws ShellException{
-		if(arguments.length > 0 && (arguments[0].equals("--help") || arguments[0].equals("-h"))){
-			return help();
-		}
-		else{
-			return Ansi.ansi().eraseScreen().cursor(0, 0).toString();
-		}
+		return ShellFormatter.clearTerminal().toString() + ShellFormatter.setCursorPosition(0, 0).toString();
 	}
 
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
+	@Override
+	protected String getHelpText(){
+		return ""
 		+ "Usage: clear\n"
-		+ "Clears all text from the terminal\n"
-		).fgDefault().toString();
+		+ "Clears all text from the terminal\n";
 	}
 }

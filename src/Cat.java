@@ -1,5 +1,3 @@
-import org.fusesource.jansi.Ansi;
-
 import java.io.FileNotFoundException;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
@@ -18,7 +16,6 @@ public class Cat extends ShellCommand {
 		ABBREVIATION_MAP.put("-s", "--squeeze-blank");
 		ABBREVIATION_MAP.put("-E", "--show-ends");
 		ABBREVIATION_MAP.put("-n", "--number");
-		ABBREVIATION_MAP.put("-h", "--help");
 	}
 
 	public Cat(){
@@ -26,7 +23,6 @@ public class Cat extends ShellCommand {
 		flagMap.put("--squeeze-blank", false);
 		flagMap.put("--show-ends", false);
 		flagMap.put("--number", false);
-		flagMap.put("--help", false);
 	}
 
 	@Override
@@ -76,10 +72,6 @@ public class Cat extends ShellCommand {
 	}
 
 	private String generateOutput(String[] inputs) throws ShellException {
-		if(flagMap.get("--help")){
-			return help();
-		}
-
 		String[] lines = assembleBase(inputs);
 
 		if(flagMap.get("--squeeze-blank")){
@@ -216,8 +208,9 @@ public class Cat extends ShellCommand {
 		}
 	}
 
-	protected String help(){
-		return Ansi.ansi().fgYellow().render(""
+	@Override
+	protected String getHelpText(){
+		return ""
 		+ "Usage: cat [OPTION]... [FILE]...\n"
 		+ "Concatenate FILE(s) to standard output.\n"
 		+ "\n"
@@ -228,7 +221,6 @@ public class Cat extends ShellCommand {
 		+ "\n"
 		+ "Examples:\n"
 		+ MiniShell.INDENT + "cat a      Output a's contents\n"
-		+ MiniShell.INDENT + "cat a b    Output a's contents concatentated with b's contents\n"
-		).fgDefault().toString();
+		+ MiniShell.INDENT + "cat a b    Output a's contents concatentated with b's contents\n";
 	}
 }
