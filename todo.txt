@@ -1,15 +1,15 @@
 INCOMPLETE:
 
 MiniShell.java
-Mkdir.java
-Rmdir.java
-Touch.java
 Grep.java
-Pwd.java
 Cat.java
-Mv.java
-Cp.java
 Ls.java
+
+Touch.java
+Rmdir.java
+Mkdir.java
+Pwd.java
+Cp.java
 
 COMPLETE:
 
@@ -19,3 +19,4 @@ ShellPath.java
 Clear.java
 Rm.java
 Cd.java
+Mv.java
