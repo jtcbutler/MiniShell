@@ -9,6 +9,11 @@ import java.util.Arrays;
 import java.util.Set;
 
 public class Ls extends ShellCommand{
+    /**
+     * This method is used to execute the ls command. It takes in an array of arguments and returns a string of the output of the ls command.
+     * @return A string of the output 
+     * @throws ShellException If there is an error in the ls command.
+     */
     @Override
     protected String processCommand() throws ShellException {
         String total_return = "";
@@ -61,7 +66,11 @@ public class Ls extends ShellCommand{
         } 
     }
 
-
+    /**
+     * This method is used to print all the files and directories in the current directory.(including hidden files)
+     * @return A string of the output with color.
+     * @throws ShellException If there is an error in the ls command.
+     */
     public String execute_Ls_A() throws ShellException {
         String total_return = "";
         String currentPath="";
@@ -104,6 +113,11 @@ public class Ls extends ShellCommand{
     }
 
     
+    /**
+     * This method is used to print the files and directories with more information.(not including hidden files)
+     * @return strings of the output 
+     * @throws ShellException If there is an error in the ls command.
+     */
     public String execute_Ls_l() throws ShellException{
         String total_return = "";
         String fullPath = "";
@@ -236,6 +250,11 @@ public class Ls extends ShellCommand{
     }
 
 
+    /**
+     * This method is used to print the files and directories with more information and sizes in human readable format.(not including hidden files)
+     * @return strings of the output 
+     * @throws ShellException If there is an error in the ls command
+     */
 
     public String execute_Ls_lh() throws ShellException{
         String total_return = "";

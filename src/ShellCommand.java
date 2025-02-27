@@ -1,7 +1,7 @@
 /**
  * Blueprint for a Bash command (e.g. cd, ls, cat, etc.)
  *
- * @authors	Jackson Butler,
+ * @authors	Jackson Butler,Jiafeng Gu
  * @since	Feb 25, 2025
  */
 abstract public class ShellCommand {

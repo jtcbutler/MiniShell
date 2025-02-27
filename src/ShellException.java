@@ -1,7 +1,7 @@
 /**
  * A barebones exception type used throughout the MiniShell to improve clarity
  *
- * @authors Jackson Butler,
+ * @authors Jackson Butler,Jiafeng Gu
  * @since	Feb 25, 2025
  */
 public class ShellException extends Exception {
